@@ -16,7 +16,7 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `t3-supabase_${name}`);
+ const createTable = pgTableCreator((name) => name);
 
 export const posts = createTable(
   "post",
@@ -24,8 +24,8 @@ export const posts = createTable(
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }),
     createdAt: timestamp("created_at")
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
+        .defaultNow()
+        .notNull(),
     updatedAt: timestamp("updatedAt"),
   },
   (example) => ({
