@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { CreatePost } from "@/app/_components/create-post";
 import { api } from "@/trpc/server";
+import {AllPosts} from "@/app/_components/all-posts";
 
 export default async function Home() {
   noStore();
@@ -43,7 +44,7 @@ export default async function Home() {
             {hello ? hello.greeting : "Loading tRPC query..."}
           </p>
         </div>
-
+        <AllPosts />
         <CrudShowcase />
       </div>
     </main>
