@@ -4,7 +4,6 @@ import Link from "next/link";
 import { CreatePost } from "@/app/_components/create-post";
 import { api } from "@/trpc/server";
 import { AllPosts } from "@/app/_components/all-posts";
-import { ModeToggle } from "@/components/mode-toggle";
 
 export default async function Home() {
   noStore();

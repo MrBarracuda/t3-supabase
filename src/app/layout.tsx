@@ -4,8 +4,6 @@ import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { cn } from "@/lib/utils";
-import { ThemeProvider } from "next-themes";
-import { ModeToggle } from "@/components/mode-toggle";
 
 const inter = Inter({
   subsets: ["latin"],
