@@ -3,7 +3,8 @@ import Link from "next/link";
 
 import { CreatePost } from "@/app/_components/create-post";
 import { api } from "@/trpc/server";
-import {AllPosts} from "@/app/_components/all-posts";
+import { AllPosts } from "@/app/_components/all-posts";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export default async function Home() {
   noStore();
@@ -21,33 +22,32 @@ export default async function Home() {
           </p>
 
           <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-              href="/"
+            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
+            href="/"
           >
             <h3 className="text-2xl font-bold">LOGO</h3>
           </Link>
 
           <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-              href="/shoes/men"
+            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
+            href="/shoes/men"
           >
             <h3 className="text-2xl font-bold">Men</h3>
           </Link>
 
           <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-              href="/shoes/women"
+            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
+            href="/shoes/women"
           >
             <h3 className="text-2xl font-bold">Women</h3>
           </Link>
 
           <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-              href="/shoes/kids"
+            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
+            href="/shoes/kids"
           >
             <h3 className="text-2xl font-bold">Kids</h3>
           </Link>
-
         </div>
         <AllPosts />
         <CrudShowcase />
