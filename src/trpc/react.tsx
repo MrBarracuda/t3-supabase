@@ -8,6 +8,7 @@ import { useState } from "react";
 import { type AppRouter } from "@/server/api/root";
 import { getUrl, transformer } from "./shared";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 export const api = createTRPCReact<AppRouter>();
 
@@ -39,6 +40,7 @@ export function TRPCReactProvider({ children }: { children: React.ReactNode }) {
           enableSystem
           disableTransitionOnChange
         >
+          <ReactQueryDevtools />
           {children}
         </ThemeProvider>
       </api.Provider>
