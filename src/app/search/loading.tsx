@@ -1,0 +1,18 @@
+import Index from "@/components/grid";
+
+export default function Loading() {
+  return (
+    <Index className="grid-cols-2 lg:grid-cols-3">
+      {Array(12)
+        .fill(0)
+        .map((_, index) => {
+          return (
+            <Index.Item
+              key={index}
+              className="animate-pulse bg-neutral-100 dark:bg-neutral-900"
+            />
+          );
+        })}
+    </Index>
+  );
+}
