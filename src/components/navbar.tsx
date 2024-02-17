@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Icons } from "@/components/icons";
-// import Search from "@/components/search";
 import { MaxWidthWrapper } from "@/components/max-width-wrapper";
 import { NavItems } from "@/components/nav-items";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -16,9 +15,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { SearchDrawer } from "@/components/search-drawer";
 
 export default function Navbar() {
+  const user = {
+    name: "Dmytro",
+    src: "https://github.com/shadcn.png",
+  };
+
+  // const user = {};
+
   return (
     <div className="sticky inset-x-0 top-0 z-50 h-16 border-b bg-background">
       <header className="relative">
@@ -52,34 +57,52 @@ export default function Navbar() {
                 <Icons.cart />
               </Button>
 
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full">
-                    <Icons.profile />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuLabel>
-                    <Avatar>
-                      <AvatarImage src="https://github.com/shadcn.png" />
-                      <AvatarFallback>DD</AvatarFallback>
-                    </Avatar>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <Link href="/profile">Profile</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-not-allowed focus:bg-background">
-                    {/*TODO: Add protected route to dashboard page*/}
-                    Seller Dashboard
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="text-red-500 focus:text-red-600">
-                    {/*TODO: implement log out feature*/}
-                    Log out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {Object.keys(user).length === 0 ? (
+                <Link
+                  href="/login"
+                  className={cn(
+                    buttonVariants({ variant: "ghost" }),
+                    "rounded-full",
+                  )}
+                >
+                  <Icons.profile />
+                </Link>
+              ) : (
+                // <Button variant="ghost" size="icon" className="rounded-full">
+                // </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full"
+                    >
+                      <Icons.profile />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>
+                      <Avatar>
+                        <AvatarImage src={user.src ?? ""} />
+                        <AvatarFallback>DD</AvatarFallback>
+                      </Avatar>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <Link href="/profile">Profile</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-not-allowed focus:bg-background">
+                      {/*TODO: Add protected route to dashboard page*/}
+                      Seller Dashboard
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="text-red-500 focus:text-red-600">
+                      {/*TODO: implement log out feature*/}
+                      Log out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
             {/*!-----*/}
           </div>
