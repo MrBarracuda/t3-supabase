@@ -1,11 +1,8 @@
 import Link from "next/link";
-import { ModeToggle } from "@/components/mode-toggle";
 
 export default function Men() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
-      <ModeToggle />
-
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
         <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
           This page is for <span className="text-[hsl(280,100%,70%)]">Men</span>{" "}

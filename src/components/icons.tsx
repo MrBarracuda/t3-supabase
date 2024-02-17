@@ -5,6 +5,11 @@ import {
   Loader2,
   X,
   Search,
+  ArrowDownToLine,
+  CheckCircle,
+  Leaf,
+  User,
+  ShoppingBag,
   type LucideIcon,
   type LucideProps,
 } from "lucide-react";
@@ -18,6 +23,11 @@ export const Icons = {
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
   search: Search,
+  arrowDownToLine: ArrowDownToLine,
+  checkCircle: CheckCircle,
+  leaf: Leaf,
+  profile: User,
+  cart: ShoppingBag,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"
