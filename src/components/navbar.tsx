@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { Cart } from "@/components/cart";
 
 export default function Navbar() {
   const user = {
@@ -50,12 +51,10 @@ export default function Navbar() {
               <ModeToggle />
 
               <Button variant="ghost" size="icon" className="rounded-full">
-                <Icons.search />
+                <Icons.search aria-hidden="true" />
               </Button>
 
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <Icons.cart />
-              </Button>
+              <Cart />
 
               {Object.keys(user).length === 0 ? (
                 <Link
@@ -65,7 +64,7 @@ export default function Navbar() {
                     "rounded-full",
                   )}
                 >
-                  <Icons.profile />
+                  <Icons.profile aria-hidden="true" />
                 </Link>
               ) : (
                 // <Button variant="ghost" size="icon" className="rounded-full">
@@ -77,7 +76,7 @@ export default function Navbar() {
                       size="icon"
                       className="rounded-full"
                     >
-                      <Icons.profile />
+                      <Icons.profile aria-hidden="true" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
