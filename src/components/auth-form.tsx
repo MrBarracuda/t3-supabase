@@ -35,6 +35,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isGitHubLoading, setIsGitHubLoading] = useState<boolean>(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false);
   const searchParams = useSearchParams();
 
   const handleLoginWithOAuth = (provider: "google" | "github") => {
@@ -93,7 +94,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={isLoading || isGitHubLoading}
+              disabled={isLoading || isGitHubLoading || isGoogleLoading}
               {...register("email")}
             />
             {errors?.email && (
@@ -142,13 +143,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         type="button"
         className={cn(buttonVariants({ variant: "outline" }))}
         onClick={() => {
-          setIsGitHubLoading(true);
+          setIsGoogleLoading(true);
           // signIn("github");
           handleLoginWithOAuth("google");
         }}
-        disabled={isLoading || isGitHubLoading}
+        disabled={isLoading || isGoogleLoading}
       >
-        {isGitHubLoading ? (
+        {isGoogleLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
           <Icons.google className="mr-2 h-4 w-4" />
