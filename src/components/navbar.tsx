@@ -51,7 +51,7 @@ export default function Navbar() {
               <ModeToggle />
 
               <Button variant="ghost" size="icon" className="rounded-full">
-                <Icons.search aria-hidden="true" />
+                <Icons.search />
               </Button>
 
               <Cart />
@@ -64,7 +64,7 @@ export default function Navbar() {
                     "rounded-full",
                   )}
                 >
-                  <Icons.profile aria-hidden="true" />
+                  <Icons.profile />
                 </Link>
               ) : (
                 // <Button variant="ghost" size="icon" className="rounded-full">
