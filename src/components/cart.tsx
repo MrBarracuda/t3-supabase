@@ -11,12 +11,12 @@ import {
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { Separator } from "@/components/ui/separator";
-import { formatPrice } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
 
 export function Cart() {
-  const itemCount = 0;
+  const itemCount = 4;
 
   const shippingFee = 5;
   const taxFee = 4;
@@ -26,10 +26,16 @@ export function Cart() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="rounded-full">
-          {/*TODO: fix issue with inner button icon position without using -ml-2*/}
-          <Icons.cart className="-ml-2 h-6 w-6" />
-          <span className="-ml-4 mt-2 text-xs font-bold">{itemCount}</span>
+        <Button variant="ghost" size="icon" className="relative rounded-full">
+          <Icons.cart className="h-6 w-6" />
+          <span
+            className={cn(
+              itemCount === 0 ? "hidden" : "",
+              "absolute top-4 text-xs font-bold",
+            )}
+          >
+            {itemCount}
+          </span>
         </Button>
       </SheetTrigger>
       <SheetContent className="flex w-full flex-col pr-0 sm:max-w-lg">
