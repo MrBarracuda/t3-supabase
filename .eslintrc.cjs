@@ -35,3 +35,5 @@ const config = {
 };
 
 module.exports = config;
+
+// TODO: add components/ui and lib/types to ignore

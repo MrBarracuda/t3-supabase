@@ -7,4 +7,6 @@ await import("./src/env.js");
 /** @type {import("next").NextConfig} */
 const config = {};
 
+// TODO: if getting errors with google/github profile images add hostname and protocol to options
+
 export default config;
