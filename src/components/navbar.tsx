@@ -1,10 +1,11 @@
 "use client";
+
 import Link from "next/link";
 import { Icons } from "@/components/icons";
 import { MaxWidthWrapper } from "@/components/max-width-wrapper";
 import { NavItems } from "@/components/nav-items";
 import { ModeToggle } from "@/components/mode-toggle";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import {
@@ -15,22 +16,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
 import { Cart } from "@/components/cart";
-import supabaseBrowser from "@/lib/supabase/browser";
-import { useState } from "react";
+import { supabaseBrowser } from "@/lib/supabase/browser";
+import { useUser } from "@/hook/useUser";
 
 export default function Navbar() {
-  const user = {
-    name: "Dmytro",
-    src: "https://github.com/shadcn.png",
-  };
   const signOut = async () => {
     const supabase = supabaseBrowser();
     const { error } = await supabase.auth.signOut();
     console.log(error);
+    // TODO: implement useQueryMutation to set the use to null
     // setUser(false);
   };
+
+  const { isFetching, data } = useUser();
 
   return (
     <div className="sticky inset-x-0 top-0 z-50 h-16 border-b bg-background">
@@ -63,16 +62,12 @@ export default function Navbar() {
 
               <Cart />
 
-              {Object.keys(user).length === 0 ? (
-                <Link
-                  href="/login"
-                  className={cn(
-                    buttonVariants({ variant: "ghost" }),
-                    "rounded-full",
-                  )}
-                >
-                  <Icons.profile />
-                </Link>
+              {!data?.id ? (
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <Link href="/login" className="appearance-none">
+                    <Icons.profile />
+                  </Link>
+                </Button>
               ) : (
                 // <Button variant="ghost" size="icon" className="rounded-full">
                 // </Button>
@@ -83,14 +78,16 @@ export default function Navbar() {
                       size="icon"
                       className="rounded-full"
                     >
-                      <Icons.profile aria-hidden="true" />
+                      <Icons.profile />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuLabel>
                       <Avatar>
-                        <AvatarImage src={user.src ?? ""} />
-                        <AvatarFallback>DD</AvatarFallback>
+                        <AvatarImage src={data?.image_url ?? ""} />
+                        <AvatarFallback>
+                          {data?.display_name?.at(0)}
+                        </AvatarFallback>
                       </Avatar>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
@@ -112,7 +109,6 @@ export default function Navbar() {
                 </DropdownMenu>
               )}
             </div>
-            {/*!-----*/}
           </div>
         </MaxWidthWrapper>
       </header>

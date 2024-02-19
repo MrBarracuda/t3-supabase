@@ -12,7 +12,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Icons } from "@/components/icons";
-import supabaseBrowser from "@/lib/supabase/browser";
+import { supabaseBrowser } from "@/lib/supabase/browser";
 import { getBaseUrl } from "@/trpc/shared";
 import { toast } from "@/components/ui/use-toast";
 

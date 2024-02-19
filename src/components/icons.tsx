@@ -9,7 +9,6 @@ import {
   CheckCircle,
   Leaf,
   User,
-  ShoppingBag,
   type LucideIcon,
   type LucideProps,
 } from "lucide-react";
