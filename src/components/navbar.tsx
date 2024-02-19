@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { Icons } from "@/components/icons";
 import { MaxWidthWrapper } from "@/components/max-width-wrapper";
@@ -16,14 +17,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { Cart } from "@/components/cart";
+import supabaseBrowser from "@/lib/supabase/browser";
+import { useState } from "react";
 
 export default function Navbar() {
   const user = {
     name: "Dmytro",
     src: "https://github.com/shadcn.png",
   };
-
-  // const user = {};
+  const signOut = async () => {
+    const supabase = supabaseBrowser();
+    const { error } = await supabase.auth.signOut();
+    console.log(error);
+    // setUser(false);
+  };
 
   return (
     <div className="sticky inset-x-0 top-0 z-50 h-16 border-b bg-background">
@@ -97,7 +104,9 @@ export default function Navbar() {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="text-red-500 focus:text-red-600">
                       {/*TODO: implement log out feature*/}
-                      Log out
+                      <button className="appearance-none" onClick={signOut}>
+                        Log out
+                      </button>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

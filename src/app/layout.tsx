@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { getBaseUrl } from "@/trpc/shared";
 import { Suspense } from "react";
 import Navbar from "@/components/navbar";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -44,6 +45,7 @@ export default function RootLayout({
             <main className="relative flex min-h-screen flex-col">
               <div className="flex-1 flex-grow">{children}</div>
             </main>
+            <Toaster />
           </Suspense>
         </TRPCReactProvider>
       </body>

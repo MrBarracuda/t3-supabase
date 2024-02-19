@@ -2,28 +2,32 @@
 
 import { useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { useState } from "react";
+import { type HTMLAttributes, useState } from "react";
 
 import { cn } from "@/lib/utils";
-// import { userAuthSchema } from "@/lib/validations/auth";
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-// import { toast } from "@/components/ui/use-toast";
 import { Icons } from "@/components/icons";
 import supabaseBrowser from "@/lib/supabase/browser";
+import { getBaseUrl } from "@/trpc/shared";
+import { toast } from "@/components/ui/use-toast";
 
 const userAuthSchema = z.object({
   email: z.string().email(),
 });
 
-type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
+type UserAuthFormProps = HTMLAttributes<HTMLDivElement>;
 
 type FormData = z.infer<typeof userAuthSchema>;
+
+// type userData = {
+//   session: any
+//   user: any
+// }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const {
@@ -38,6 +42,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false);
   const searchParams = useSearchParams();
 
+  // const [userData, setUserData] = useState<unknown>();
   const handleLoginWithOAuth = (provider: "google" | "github") => {
     const supabase = supabaseBrowser();
     // with void operator
@@ -45,38 +50,38 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     void supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: location.origin,
+        redirectTo: getBaseUrl() + "/login/callback",
       },
     });
   };
 
-  // async function onSubmit(data: FormData) {
-  //   setIsLoading(true);
-  //
-  //   const signInResult = await signIn("email", {
-  //     email: data.email.toLowerCase(),
-  //     redirect: false,
-  //     callbackUrl: searchParams?.get("from") || "/dashboard",
-  //   });
-  //
-  //   setIsLoading(false);
-  //
-  //   if (!signInResult?.ok) {
-  //     return toast({
-  //       title: "Something went wrong.",
-  //       description: "Your sign in request failed. Please try again.",
-  //       variant: "destructive",
-  //     });
-  //   }
-  //
-  //   return toast({
-  //     title: "Check your email",
-  //     description: "We sent you a login link. Be sure to check your spam too.",
-  //   });
-  // }
+  // console.log(userData);
 
-  async function onSubmit(data: FormData) {
-    //   setIsLoading(true);
+  async function onSubmit(formData: FormData) {
+    setIsLoading(true);
+    const supabase = supabaseBrowser();
+    const { data, error } = await supabase.auth.signInWithOtp({
+      email: formData.email.toLowerCase(),
+      options: {
+        emailRedirectTo: searchParams?.get("from") ?? getBaseUrl(),
+        shouldCreateUser: false,
+      },
+    });
+    // setUserData(res.data);
+    setIsLoading(false);
+
+    if (error) {
+      return toast({
+        title: "Something went wrong.",
+        description: "Your sign in request failed. Please try again.",
+        variant: "destructive",
+      });
+    }
+
+    return toast({
+      title: "Check your email",
+      description: "We sent you a login link. Be sure to check your spam too.",
+    });
   }
 
   return (
@@ -126,7 +131,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         className={cn(buttonVariants({ variant: "outline" }))}
         onClick={() => {
           setIsGitHubLoading(true);
-          // signIn("github");
           handleLoginWithOAuth("github");
         }}
         disabled={isLoading || isGitHubLoading}
@@ -135,7 +139,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
           <Icons.gitHub className="mr-2 h-4 w-4" />
-        )}{" "}
+        )}
         Github
       </button>
 
@@ -144,7 +148,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         className={cn(buttonVariants({ variant: "outline" }))}
         onClick={() => {
           setIsGoogleLoading(true);
-          // signIn("github");
           handleLoginWithOAuth("google");
         }}
         disabled={isLoading || isGoogleLoading}
@@ -153,7 +156,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
           <Icons.google className="mr-2 h-4 w-4" />
-        )}{" "}
+        )}
         Google
       </button>
     </div>
