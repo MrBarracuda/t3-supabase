@@ -15,19 +15,19 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
- const createTable = pgTableCreator((name) => name);
+const createTable = pgTableCreator((name) => name);
 
 export const posts = createTable(
   "post",
   {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }),
-    createdAt: timestamp("created_at")
-        .defaultNow()
-        .notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updatedAt"),
   },
   (example) => ({
     nameIndex: index("name_idx").on(example.name),
-  })
+  }),
 );
+
+// TODO: Create drizzle schema for profile table

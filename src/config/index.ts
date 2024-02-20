@@ -25,3 +25,5 @@ export const FEATURES = [
     description: "We donate 10% of our income to Ukrainian Army",
   },
 ];
+
+export const PROTECTED_PATH = ["/dashboard", "/profile"];
