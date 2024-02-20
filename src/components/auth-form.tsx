@@ -24,16 +24,12 @@ type UserAuthFormProps = HTMLAttributes<HTMLDivElement>;
 
 type FormData = z.infer<typeof userAuthSchema>;
 
-// type userData = {
-//   session: any
-//   user: any
-// }
-
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FormData>({
     resolver: zodResolver(userAuthSchema),
   });
@@ -42,7 +38,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false);
   const searchParams = useSearchParams();
 
-  // const [userData, setUserData] = useState<unknown>();
   const handleLoginWithOAuth = (provider: "google" | "github") => {
     const supabase = supabaseBrowser();
     // with void operator
@@ -50,12 +45,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     void supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: getBaseUrl() + "/login/callback",
+        redirectTo:
+          // TODO: fix issue with redirects
+          getBaseUrl() + "/auth/callback?next=" + searchParams.get("next"),
       },
     });
   };
-
-  // console.log(userData);
 
   async function onSubmit(formData: FormData) {
     setIsLoading(true);
@@ -63,11 +58,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const { data, error } = await supabase.auth.signInWithOtp({
       email: formData.email.toLowerCase(),
       options: {
+        // TODO: fix issue with redirects
         emailRedirectTo: searchParams?.get("from") ?? getBaseUrl(),
         shouldCreateUser: false,
       },
     });
-    // setUserData(res.data);
     setIsLoading(false);
 
     if (error) {
@@ -77,6 +72,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         variant: "destructive",
       });
     }
+
+    reset();
 
     return toast({
       title: "Check your email",
