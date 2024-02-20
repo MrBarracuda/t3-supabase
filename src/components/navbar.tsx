@@ -19,16 +19,45 @@ import {
 import { Cart } from "@/components/cart";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import { useUser } from "@/hook/useUser";
+import { useQueryClient } from "@tanstack/react-query";
+import { usePathname, useRouter } from "next/navigation";
+import { toast } from "@/components/ui/use-toast";
+import { PROTECTED_PATH } from "@/config";
 
 export default function Navbar() {
-  const signOut = async () => {
+  // TODO: extract client logic to different compoentent
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleLogOut = async () => {
     const supabase = supabaseBrowser();
+
+    queryClient.clear();
+
     const { error } = await supabase.auth.signOut();
-    console.log(error);
-    // TODO: implement useQueryMutation to set the use to null
-    // setUser(false);
+
+    router.refresh();
+
+    if (PROTECTED_PATH.includes(pathname)) {
+      router.replace("/auth?next=" + pathname);
+    }
+
+    if (error) {
+      return toast({
+        title: "Something went wrong.",
+        description: "Your log out request failed. Please try again.",
+        variant: "destructive",
+      });
+    }
+
+    return toast({
+      title: "Log out successfully",
+      description: "Come back ",
+    });
   };
 
+  // TODO: move this logic to auth-form, create a global store for user data object
   const { isFetching, data } = useUser();
 
   return (
@@ -63,14 +92,12 @@ export default function Navbar() {
               <Cart />
 
               {!data?.id ? (
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <Link href="/login" className="appearance-none">
+                <Link href="/auth" className="appearance-none" aria-hidden>
+                  <Button variant="ghost" size="icon" className="rounded-full">
                     <Icons.profile />
-                  </Link>
-                </Button>
+                  </Button>
+                </Link>
               ) : (
-                // <Button variant="ghost" size="icon" className="rounded-full">
-                // </Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -91,19 +118,19 @@ export default function Navbar() {
                       </Avatar>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
+                    <DropdownMenuItem asChild>
                       <Link href="/profile">Profile</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem className="cursor-not-allowed focus:bg-background">
-                      {/*TODO: Add protected route to dashboard page*/}
+                      {/*TODO: Allow to navigate to dashboard if user has role of a seller */}
                       Seller Dashboard
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-red-500 focus:text-red-600">
-                      {/*TODO: implement log out feature*/}
-                      <button className="appearance-none" onClick={signOut}>
-                        Log out
-                      </button>
+                    <DropdownMenuItem
+                      className="text-red-500 focus:text-red-600"
+                      onClick={handleLogOut}
+                    >
+                      Log out
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
