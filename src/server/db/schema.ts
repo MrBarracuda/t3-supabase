@@ -6,7 +6,8 @@ import {
   pgTableCreator,
   serial,
   timestamp,
-  varchar,
+  uuid,
+  text,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -21,9 +22,11 @@ export const posts = createTable(
   "post",
   {
     id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt"),
+    name: text("name"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }),
   },
   (example) => ({
     nameIndex: index("name_idx").on(example.name),
@@ -31,3 +34,18 @@ export const posts = createTable(
 );
 
 // TODO: Create drizzle schema for profile table
+
+export const users = createTable("users", {
+  id: uuid("id").primaryKey(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
+  email: text("email").unique().notNull(),
+  displayName: text("display_name").notNull(),
+  imageUrl: text("image_url"),
+});
+
+export const products = createTable("products", {
+  id: uuid("id").primaryKey(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
+  title: text("title").notNull(),
+  imageUrl: text("image_url"),
+});
