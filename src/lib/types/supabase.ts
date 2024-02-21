@@ -30,7 +30,28 @@ export type Database = {
         }
         Relationships: []
       }
-      profiles: {
+      products: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string | null
+          title: string
+        }
+        Insert: {
+          created_at: string
+          id: string
+          image_url?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      users: {
         Row: {
           created_at: string
           display_name: string | null
