@@ -5,7 +5,7 @@ import { Icons } from "@/components/icons";
 import { MaxWidthWrapper } from "@/components/max-width-wrapper";
 import { NavItems } from "@/components/nav-items";
 import { ModeToggle } from "@/components/mode-toggle";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import {
@@ -22,10 +22,11 @@ import { useUser } from "@/hook/useUser";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
-import { PROTECTED_PATH } from "@/config";
+import { PROTECTED_PATH } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 export default function Navbar() {
-  // TODO: extract client logic to different compoentent
+  // TODO: extract client logic to different component
   const queryClient = useQueryClient();
   const router = useRouter();
   const pathname = usePathname();

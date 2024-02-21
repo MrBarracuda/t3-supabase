@@ -1,7 +1,7 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { env } from "@/env";
-import { PROTECTED_PATH } from "@/config";
+import { PROTECTED_PATH } from "@/lib/types";
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({

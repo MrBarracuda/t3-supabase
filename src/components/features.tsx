@@ -1,5 +1,5 @@
 import { MaxWidthWrapper } from "@/components/max-width-wrapper";
-import { FEATURES } from "@/config";
+import { FEATURES } from "@/lib/types";
 
 export function Features() {
   return (

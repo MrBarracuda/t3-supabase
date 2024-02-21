@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { PRODUCT_CATEGORIES } from "@/config";
+import { PRODUCT_CATEGORIES } from "@/lib/types";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export function NavItems() {
   return (

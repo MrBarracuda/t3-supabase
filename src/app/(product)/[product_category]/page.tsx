@@ -1,4 +1,4 @@
-import { PRODUCT_CATEGORIES } from "@/config";
+import { PRODUCT_CATEGORIES } from "@/lib/types";
 import { notFound } from "next/navigation";
 import { MaxWidthWrapper } from "@/components/max-width-wrapper";
 
