@@ -67,10 +67,13 @@ export default function Navbar() {
         <MaxWidthWrapper>
           <div className="flex h-16 items-center justify-between">
             {/*TODO: implement mobile menu*/}
-            <div className="ml-4 flex hover:text-muted-foreground lg:ml-0">
+            <div className="ml-4 flex lg:ml-0">
               <Link
                 href="/"
-                className="mr-2 flex w-full items-center justify-center md:w-auto lg:mr-6"
+                className={cn(
+                  buttonVariants({ variant: "link" }),
+                  "hover:text-muted-foreground hover:no-underline",
+                )}
               >
                 <Icons.logo className="h-8 w-8" />
                 <div className="text-md ml-2 hidden flex-none font-medium uppercase lg:block">
@@ -100,13 +103,19 @@ export default function Navbar() {
                 </Link>
               ) : (
                 <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <Avatar>
-                      <AvatarImage src={data?.image_url ?? ""} />
-                      <AvatarFallback>
-                        {data?.display_name?.slice(0, 1)}
-                      </AvatarFallback>
-                    </Avatar>
+                  <DropdownMenuTrigger asChild aria-hidden>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full"
+                    >
+                      <Avatar>
+                        <AvatarImage src={data?.image_url ?? ""} />
+                        <AvatarFallback>
+                          {data?.display_name?.slice(0, 1)}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuLabel>{data.display_name}</DropdownMenuLabel>
