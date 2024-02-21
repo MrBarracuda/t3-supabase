@@ -99,24 +99,16 @@ export default function Navbar() {
                 </Link>
               ) : (
                 <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="rounded-full"
-                    >
-                      <Icons.profile />
-                    </Button>
+                  <DropdownMenuTrigger>
+                    <Avatar>
+                      <AvatarImage src={data?.image_url ?? ""} />
+                      <AvatarFallback>
+                        {data?.display_name?.slice(0, 1)}
+                      </AvatarFallback>
+                    </Avatar>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuLabel>
-                      <Avatar>
-                        <AvatarImage src={data?.image_url ?? ""} />
-                        <AvatarFallback>
-                          {data?.display_name?.at(0)}
-                        </AvatarFallback>
-                      </Avatar>
-                    </DropdownMenuLabel>
+                    <DropdownMenuLabel>{data.display_name}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
                       <Link href="/profile">Profile</Link>
