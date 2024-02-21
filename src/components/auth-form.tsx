@@ -3,8 +3,6 @@
 import { useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
-
 import { type HTMLAttributes, useState } from "react";
 
 import { cn } from "@/lib/utils";
@@ -15,16 +13,11 @@ import { Icons } from "@/components/icons";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import { getBaseUrl } from "@/trpc/shared";
 import { toast } from "@/components/ui/use-toast";
+import { userAuthSchema, type FormData } from "@/lib/validations/auth";
 
-const userAuthSchema = z.object({
-  email: z.string().email(),
-});
+type AuthFormProps = HTMLAttributes<HTMLDivElement>;
 
-type UserAuthFormProps = HTMLAttributes<HTMLDivElement>;
-
-type FormData = z.infer<typeof userAuthSchema>;
-
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+export function AuthForm({ className, ...props }: AuthFormProps) {
   const {
     register,
     handleSubmit,
@@ -33,14 +26,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   } = useForm<FormData>({
     resolver: zodResolver(userAuthSchema),
   });
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isGitHubLoading, setIsGitHubLoading] = useState<boolean>(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false);
+
   const searchParams = useSearchParams();
 
   const handleLoginWithOAuth = (provider: "google" | "github") => {
     const supabase = supabaseBrowser();
-    // with void operator
     // add + "/login/callback to location.origin"
     void supabase.auth.signInWithOAuth({
       provider,
@@ -52,15 +46,14 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     });
   };
 
-  async function onSubmit(formData: FormData) {
+  const onSubmit = async (formData: FormData) => {
     setIsLoading(true);
     const supabase = supabaseBrowser();
-    const { data, error } = await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.signInWithOtp({
       email: formData.email.toLowerCase(),
       options: {
         // TODO: fix issue with redirects
         emailRedirectTo: searchParams?.get("from") ?? getBaseUrl(),
-        shouldCreateUser: false,
       },
     });
     setIsLoading(false);
@@ -79,7 +72,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       title: "Check your email",
       description: "We sent you a login link. Be sure to check your spam too.",
     });
-  }
+  };
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
