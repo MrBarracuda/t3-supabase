@@ -59,7 +59,8 @@ export default function Navbar() {
   };
 
   // TODO: move this logic to auth-form, create a global store for user data object
-  const { isFetching, data } = useUser();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { isFetching, data: user } = useUser();
 
   return (
     <div className="sticky inset-x-0 top-0 z-50 h-16 border-b bg-background">
@@ -95,7 +96,7 @@ export default function Navbar() {
 
               <Cart />
 
-              {!data?.id ? (
+              {!user?.id ? (
                 <Link href="/auth" className="appearance-none" aria-hidden>
                   <Button variant="ghost" size="icon" className="rounded-full">
                     <Icons.profile />
@@ -110,15 +111,15 @@ export default function Navbar() {
                       className="rounded-full"
                     >
                       <Avatar>
-                        <AvatarImage src={data?.image_url ?? ""} />
+                        <AvatarImage src={user?.image_url ?? ""} />
                         <AvatarFallback>
-                          {data?.display_name?.slice(0, 1)}
+                          {user?.display_name?.slice(0, 1)}
                         </AvatarFallback>
                       </Avatar>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuLabel>{data.display_name}</DropdownMenuLabel>
+                    <DropdownMenuLabel>{user.display_name}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
                       <Link href="/profile">Profile</Link>

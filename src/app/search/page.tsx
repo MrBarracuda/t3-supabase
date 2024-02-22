@@ -3,6 +3,7 @@
 // import { getProducts } from "lib/shopify";
 import Index from "@/components/grid";
 
+// TODO: explore edge runtime
 export const runtime = "edge";
 
 export const metadata = {

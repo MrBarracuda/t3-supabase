@@ -48,6 +48,7 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
 
   const onSubmit = async (formData: FormData) => {
     setIsLoading(true);
+
     const supabase = supabaseBrowser();
     const { error } = await supabase.auth.signInWithOtp({
       email: formData.email.toLowerCase(),
@@ -56,6 +57,7 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
         emailRedirectTo: searchParams?.get("from") ?? getBaseUrl(),
       },
     });
+
     setIsLoading(false);
 
     if (error) {

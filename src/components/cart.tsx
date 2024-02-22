@@ -14,8 +14,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 export function Cart() {
-  const itemCount = 4;
-
+  /* eslint-disable @typescript-eslint/no-inferrable-types*/
+  const itemCount: number = 4;
   const shippingFee = 5;
   const taxFee = 4;
 
