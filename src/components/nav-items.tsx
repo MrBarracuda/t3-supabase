@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 export function NavItems() {
   return (
     <nav className="flex h-full gap-4">
-      <ul className="text-md hidden gap-1 font-medium md:flex md:items-center">
+      <ul className="text-md hidden font-medium md:flex md:items-center">
         {PRODUCT_CATEGORIES.map((category) => (
           <li key={category.title}>
             <Link
