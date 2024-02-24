@@ -25,7 +25,7 @@ export function Cart() {
     <Sheet>
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="relative rounded-full">
-          <Icons.cart className="h-6 w-6" />
+          <Icons.cart />
           <span
             className={cn(
               itemCount === 0 ? "hidden" : "",
