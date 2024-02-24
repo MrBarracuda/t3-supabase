@@ -24,6 +24,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { PROTECTED_PATH } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { SearchDrawer } from "@/components/searchDrawer";
+import { LogoWithLink } from "@/components/logo-with-link";
 
 export default function Navbar() {
   // TODO: extract client logic to different component
@@ -69,18 +71,7 @@ export default function Navbar() {
           <div className="flex h-16 items-center justify-between">
             {/*TODO: implement mobile menu*/}
             <div className="ml-4 flex lg:ml-0">
-              <Link
-                href="/"
-                className={cn(
-                  buttonVariants({ variant: "link" }),
-                  "hover:text-muted-foreground hover:no-underline",
-                )}
-              >
-                <Icons.logo className="h-8 w-8" />
-                <div className="text-md ml-2 hidden flex-none font-medium uppercase lg:block">
-                  HYPESNEAKERS
-                </div>
-              </Link>
+              <LogoWithLink showName />
             </div>
 
             <div className="z-50 hidden lg:ml-8 lg:block lg:self-stretch">
@@ -90,9 +81,7 @@ export default function Navbar() {
             <div className="flex items-center gap-2">
               <ModeToggle />
 
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <Icons.search />
-              </Button>
+              <SearchDrawer />
 
               <Cart />
 
