@@ -13,12 +13,7 @@ export function Subscribe() {
       </div>
       <div className="mx-auto flex w-full flex-col items-end space-y-4 px-8 sm:flex-row sm:space-x-4 sm:space-y-0 sm:px-0 lg:w-2/3">
         <div className="relative w-full flex-grow">
-          <Input
-            type="text"
-            placeholder="Your Name"
-            name="name"
-            className="hover:bg-primary-foreground"
-          />
+          <Input type="text" placeholder="Your Name" name="name" />
         </div>
         <div className="relative w-full flex-grow">
           <Input
