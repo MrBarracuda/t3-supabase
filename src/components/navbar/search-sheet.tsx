@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Sheet,
   SheetClose,
@@ -9,10 +7,8 @@ import {
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
-import { cn, createUrl } from "@/lib/utils";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { cn } from "@/lib/utils";
+import { SearchSheetInput } from "@/components/navbar/search-sheet-input";
 
 const POPULAR_ITEMS = [
   {
@@ -33,33 +29,7 @@ const POPULAR_ITEMS = [
   },
 ];
 
-// TODO: change the icon to input, open drawer on input change
-// TODO: expand drawer to full screen and display items on the left on mobile
-
-type FormData = {
-  search: string;
-};
-
 export function SearchSheet() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { register, handleSubmit, reset } = useForm<FormData>();
-
-  function onSubmit(formData: FormData) {
-    const { search } = formData;
-    const searchTrim = search.trim();
-    const newParams = new URLSearchParams(searchParams.toString());
-
-    if (searchTrim) {
-      newParams.set("q", searchTrim);
-    } else {
-      newParams.delete("q");
-    }
-
-    reset();
-    router.push(createUrl("/search", newParams));
-  }
-
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -74,17 +44,7 @@ export function SearchSheet() {
         <div className="flex items-center justify-center">
           <div className="flex w-1/3 flex-col space-y-3">
             <div className="relative mb-6">
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <Input
-                  type="search"
-                  id="search"
-                  placeholder="Search"
-                  autoCapitalize="none"
-                  className="-ml-2 w-full px-9"
-                  {...register("search")}
-                />
-                <SheetClose type="submit" className="hidden appearance-none" />
-              </form>
+              <SearchSheetInput />
               <div className="absolute left-1 top-3">
                 <Icons.search className=" h-4 w-4" />
               </div>
