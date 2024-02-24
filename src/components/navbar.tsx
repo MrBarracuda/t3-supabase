@@ -5,7 +5,7 @@ import { Icons } from "@/components/icons";
 import { MaxWidthWrapper } from "@/components/max-width-wrapper";
 import { NavItems } from "@/components/nav-items";
 import { ModeToggle } from "@/components/mode-toggle";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import {
@@ -16,15 +16,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Cart } from "@/components/cart";
+import { CartSheet } from "@/components/cart-sheet";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import { useUser } from "@/hook/useUser";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { PROTECTED_PATH } from "@/lib/types";
-import { cn } from "@/lib/utils";
-import { SearchDrawer } from "@/components/searchDrawer";
+import { SearchSheet } from "@/components/search-sheet";
 import { LogoWithLink } from "@/components/logo-with-link";
 
 export default function Navbar() {
@@ -81,9 +80,9 @@ export default function Navbar() {
             <div className="flex items-center gap-2">
               <ModeToggle />
 
-              <SearchDrawer />
+              <SearchSheet />
 
-              <Cart />
+              <CartSheet />
 
               {!user?.id ? (
                 <Link href="/auth" className="appearance-none" aria-hidden>

@@ -13,7 +13,7 @@ import { cn, formatPrice } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
 
-export function Cart() {
+export function CartSheet() {
   /* eslint-disable @typescript-eslint/no-inferrable-types*/
   const itemCount: number = 4;
   const shippingFee = 5;
