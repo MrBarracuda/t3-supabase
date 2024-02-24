@@ -16,10 +16,10 @@ export default function Product({ params }: ProductPageProps) {
     return notFound();
   }
 
-  if (
-    currentCategory.title === "accessories" ||
-    currentCategory.title === "sale"
-  ) {
+  const isSaleOrAccessoriesPage =
+    currentCategory.title === "accessories" || currentCategory.title === "sale";
+
+  if (isSaleOrAccessoriesPage) {
     return (
       <MaxWidthWrapper className="py-20">
         <h1 className="text-3xl">Work in progress. Stay in touch</h1>

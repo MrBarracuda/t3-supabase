@@ -6,7 +6,7 @@ import { TRPCReactProvider } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 import { getBaseUrl } from "@/trpc/shared";
 import { type ReactNode, Suspense } from "react";
-import Navbar from "@/components/navbar";
+import { Navbar } from "@/components/navbar";
 import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({
