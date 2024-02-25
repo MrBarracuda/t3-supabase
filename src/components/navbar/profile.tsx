@@ -52,8 +52,7 @@ export function Profile() {
   };
 
   // TODO: move this logic to auth-form, create a global store for user data object
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { isFetching, data: user } = useUser();
+  const { data: user } = useUser();
 
   return !user?.id ? (
     <Link href="/auth" className="appearance-none">
