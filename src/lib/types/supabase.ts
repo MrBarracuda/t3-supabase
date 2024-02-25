@@ -32,22 +32,22 @@ export type Database = {
       };
       products: {
         Row: {
-          " gender": Database["public"]["Enums"]["gender"];
           created_at: string;
+          gender: Database["public"]["Enums"]["gender"];
           id: string;
           image_url: string | null;
           title: string;
         };
         Insert: {
-          " gender": Database["public"]["Enums"]["gender"];
-          created_at: string;
+          created_at?: string;
+          gender: Database["public"]["Enums"]["gender"];
           id: string;
           image_url?: string | null;
           title: string;
         };
         Update: {
-          " gender"?: Database["public"]["Enums"]["gender"];
           created_at?: string;
+          gender?: Database["public"]["Enums"]["gender"];
           id?: string;
           image_url?: string | null;
           title?: string;
