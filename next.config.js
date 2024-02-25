@@ -5,8 +5,19 @@
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
-const config = {};
-
-// TODO: if getting errors with google/github profile images add hostname and protocol to options
+const config = {
+  images: {
+    remotePatterns: [
+      {
+        hostname: "lh3.googleusercontent.com",
+        protocol: "https",
+      },
+      {
+        hostname: "avatars.githubusercontent.com",
+        protocol: "https",
+      },
+    ],
+  },
+};
 
 export default config;

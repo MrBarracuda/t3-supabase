@@ -33,7 +33,7 @@ export default function Create() {
   const onSubmit = (formData: { title: string }) => {
     const { title } = formData;
 
-    const id = uuidv4() as string;
+    const id = uuidv4();
     const createdAt = formatDate(new Date());
 
     mutate({ title, id, createdAt });
