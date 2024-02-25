@@ -56,15 +56,16 @@ export function Profile() {
   const { isFetching, data: user } = useUser();
 
   return !user?.id ? (
-    <Link href="/auth" className="appearance-none" aria-hidden>
-      <Button variant="ghost" size="icon" className="rounded-full">
+    <Link href="/auth" className="appearance-none">
+      <Button variant="ghost" size="icon">
+        {/*TODO: fix issue two focus elements exist instead of one */}
         <Icons.profile />
       </Button>
     </Link>
   ) : (
     <DropdownMenu>
       <DropdownMenuTrigger asChild aria-hidden>
-        <Button variant="ghost" size="icon" className="rounded-full">
+        <Button variant="ghost" size="icon">
           <Avatar>
             <AvatarImage src={user?.image_url ?? ""} />
             <AvatarFallback>{user?.display_name?.slice(0, 1)}</AvatarFallback>

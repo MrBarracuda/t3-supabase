@@ -33,7 +33,7 @@ export function SearchSheet() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="rounded-full">
+        <Button variant="ghost" size="icon">
           <Icons.search />
         </Button>
       </SheetTrigger>

@@ -16,12 +16,7 @@ export function Subscribe() {
           <Input type="text" placeholder="Your Name" name="name" />
         </div>
         <div className="relative w-full flex-grow">
-          <Input
-            type="email"
-            placeholder="Your Email"
-            name="email"
-            className="hover:bg-primary-foreground"
-          />
+          <Input type="email" placeholder="Your Email" name="email" />
         </div>
         <Button>Subscribe</Button>
       </div>

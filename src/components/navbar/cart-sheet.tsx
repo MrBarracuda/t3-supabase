@@ -24,7 +24,7 @@ export function CartSheet() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative rounded-full">
+        <Button variant="ghost" size="icon" className="relative">
           <Icons.cart />
           <span
             className={cn(

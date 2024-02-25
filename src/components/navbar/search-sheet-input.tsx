@@ -40,6 +40,7 @@ export function SearchSheetInput() {
         id="search"
         placeholder="Search"
         autoCapitalize="none"
+        autoComplete="off"
         className="-ml-2 w-full px-9"
         {...register("search")}
       />
