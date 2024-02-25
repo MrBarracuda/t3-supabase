@@ -45,7 +45,9 @@ export const users = createTable("users", {
 
 export const products = createTable("products", {
   id: uuid("id").primaryKey(),
-  createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
   title: text("title").notNull(),
   imageUrl: text("image_url"),
 });

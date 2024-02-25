@@ -33,3 +33,10 @@ export function formatPrice(
     maximumFractionDigits: 2,
   }).format(numericPrice);
 }
+
+export function formatDate(date: Date) {
+  const isoString = date.toISOString(); // ISO 8601 string
+  const localeString = isoString.toLocaleString(); // Locale-specific string
+
+  return new Date(localeString);
+}
