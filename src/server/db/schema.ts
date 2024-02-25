@@ -8,6 +8,7 @@ import {
   timestamp,
   uuid,
   text,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -43,11 +44,14 @@ export const users = createTable("users", {
   imageUrl: text("image_url"),
 });
 
+export const genderEnum = pgEnum("gender", ["men", "women", "kids", "unisex"]);
+
 export const products = createTable("products", {
   id: uuid("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
   title: text("title").notNull(),
+  gender: genderEnum("gender").notNull(),
   imageUrl: text("image_url"),
 });

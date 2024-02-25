@@ -6,7 +6,7 @@ export const productRouter = createTRPCRouter({
   create: publicProcedure
     .input(productCreate)
     .mutation(async ({ ctx, input }) => {
-      const { title, createdAt, id } = input;
-      await ctx.db.insert(products).values({ title, createdAt, id });
+      const { title, createdAt, id, gender } = input;
+      await ctx.db.insert(products).values({ title, createdAt, id, gender });
     }),
 });

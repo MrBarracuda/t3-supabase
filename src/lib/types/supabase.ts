@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
-
 export type Json =
   | string
   | number
@@ -34,18 +32,21 @@ export type Database = {
       };
       products: {
         Row: {
+          " gender": Database["public"]["Enums"]["gender"];
           created_at: string;
           id: string;
           image_url: string | null;
           title: string;
         };
         Insert: {
+          " gender": Database["public"]["Enums"]["gender"];
           created_at: string;
           id: string;
           image_url?: string | null;
           title: string;
         };
         Update: {
+          " gender"?: Database["public"]["Enums"]["gender"];
           created_at?: string;
           id?: string;
           image_url?: string | null;
@@ -93,7 +94,7 @@ export type Database = {
       [_ in never]: never;
     };
     Enums: {
-      [_ in never]: never;
+      gender: "men" | "women" | "kids" | "unisex";
     };
     CompositeTypes: {
       [_ in never]: never;
