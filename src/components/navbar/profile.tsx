@@ -55,8 +55,8 @@ export function Profile() {
   const { data: user } = useUser();
 
   return !user?.id ? (
-    <Link href="/auth" className="appearance-none">
-      <Button variant="ghost" size="icon">
+    <Link href="/auth">
+      <Button variant="ghost" size="icon" aria-label="join us or login">
         {/*TODO: fix issue two focus elements exist instead of one */}
         <Icons.profile />
       </Button>
@@ -64,7 +64,7 @@ export function Profile() {
   ) : (
     <DropdownMenu>
       <DropdownMenuTrigger asChild aria-hidden>
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" aria-label="profile dropdown">
           <Avatar>
             <AvatarImage src={user?.image_url ?? ""} />
             <AvatarFallback>{user?.display_name?.slice(0, 1)}</AvatarFallback>
