@@ -18,6 +18,7 @@ import { PROTECTED_PATH } from "@/lib/types";
 import { toast } from "@/components/ui/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
+import { api } from "@/trpc/react";
 
 export function Profile() {
   const queryClient = useQueryClient();
@@ -53,6 +54,8 @@ export function Profile() {
 
   // TODO: move this logic to auth-form, create a global store for user data object
   const { data: user } = useUser();
+  //
+  // const { data: user } = api.user.getCurrentUser.useQuery();
 
   return !user?.id ? (
     <Link href="/auth">
@@ -66,8 +69,8 @@ export function Profile() {
       <DropdownMenuTrigger asChild aria-hidden>
         <Button variant="ghost" size="icon" aria-label="profile dropdown">
           <Avatar>
-            <AvatarImage src={user?.image_url ?? ""} />
-            <AvatarFallback>{user?.display_name?.slice(0, 1)}</AvatarFallback>
+            <AvatarImage src={user.image_url ?? ""} />
+            <AvatarFallback>{user.display_name?.slice(0, 1)}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>

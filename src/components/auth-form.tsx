@@ -33,15 +33,15 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
 
   const searchParams = useSearchParams();
 
+  const next = searchParams.get("next") ?? "";
+
+  // TODO: fix issue with redirects
   const handleLoginWithOAuth = (provider: "google" | "github") => {
     const supabase = supabaseBrowser();
-    // add + "/login/callback to location.origin"
     void supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo:
-          // TODO: fix issue with redirects
-          getBaseUrl() + "/auth/callback?next=" + searchParams.get("next"),
+        redirectTo: getBaseUrl() + "/auth/callback?next=" + next,
       },
     });
   };
@@ -54,7 +54,7 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
       email: formData.email.toLowerCase(),
       options: {
         // TODO: fix issue with redirects
-        emailRedirectTo: searchParams?.get("from") ?? getBaseUrl(),
+        emailRedirectTo: next ?? getBaseUrl(),
       },
     });
 
