@@ -13,7 +13,7 @@ export const productRouter = createTRPCRouter({
   getAllByCategory: publicProcedure
     .input(z.enum(["accessories", "men", "women", "kids", "sale"]))
     .query(async ({ ctx, input }) => {
-      return await ctx.db.query.products.findMany({
+      return ctx.db.query.products.findMany({
         where: (products, { eq }) => eq(products.category, input),
       });
     }),
