@@ -32,22 +32,22 @@ export type Database = {
       };
       products: {
         Row: {
+          category: Database["public"]["Enums"]["category"];
           created_at: string;
-          gender: Database["public"]["Enums"]["gender"];
           id: string;
           image_url: string | null;
           title: string;
         };
         Insert: {
+          category?: Database["public"]["Enums"]["category"];
           created_at?: string;
-          gender: Database["public"]["Enums"]["gender"];
           id: string;
           image_url?: string | null;
           title: string;
         };
         Update: {
+          category?: Database["public"]["Enums"]["category"];
           created_at?: string;
-          gender?: Database["public"]["Enums"]["gender"];
           id?: string;
           image_url?: string | null;
           title?: string;
@@ -94,6 +94,7 @@ export type Database = {
       [_ in never]: never;
     };
     Enums: {
+      category: "accessories" | "men" | "women" | "kids" | "sale";
       gender: "men" | "women" | "kids" | "unisex";
     };
     CompositeTypes: {
