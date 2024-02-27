@@ -1,12 +1,14 @@
 import { Icons } from "@/components/icons";
 
 export const PRODUCT_CATEGORIES = [
-  { path: "/accessories", title: "accessories" as const },
-  { path: "/men", title: "men" as const },
-  { path: "/women", title: "women" as const },
-  { path: "/kids", title: "kids" as const },
-  { path: "/sale", title: "sale" as const },
-];
+  { path: "/accessories", title: "accessories" },
+  { path: "/men", title: "men" },
+  { path: "/women", title: "women" },
+  { path: "/kids", title: "kids" },
+  { path: "/sale", title: "sale" },
+] as const;
+
+// export const PRODUCT_GENDER = ["men", "women", "kids", "unisex"] as const;
 
 export const FEATURES = [
   {

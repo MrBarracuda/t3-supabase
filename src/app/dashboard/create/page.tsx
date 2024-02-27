@@ -40,14 +40,12 @@ export default function Create() {
   });
 
   const onSubmit = (formData: FormData) => {
-    const { title, gender } = formData;
+    const { title, category, imgUrl } = formData;
 
     const id = uuidv4();
     const createdAt = formatDate(new Date());
 
-    mutate({ title, id, createdAt, gender: "men" });
-
-    console.log({ title, id, createdAt, gender: "men" });
+    mutate({ title, id, createdAt, category: "men" });
   };
 
   return (
@@ -68,6 +66,23 @@ export default function Create() {
                 {...register("title")}
               />
               {/*TODO: implement controller component */}
+              {/*<Select>*/}
+              {/*  <SelectTrigger className="w-full">*/}
+              {/*    <SelectValue placeholder="Gender" />*/}
+              {/*  </SelectTrigger>*/}
+              {/*  <SelectContent>*/}
+              {/*    {GENDERS.map((item) => (*/}
+              {/*      <SelectItem*/}
+              {/*        key={item}*/}
+              {/*        value={item}*/}
+              {/*        className="capitalize"*/}
+              {/*        {...register("gender")}*/}
+              {/*      >*/}
+              {/*        {item}*/}
+              {/*      </SelectItem>*/}
+              {/*    ))}*/}
+              {/*  </SelectContent>*/}
+              {/*</Select>*/}
             </div>
             <Button disabled={isLoading} type="submit">
               {isLoading ? (

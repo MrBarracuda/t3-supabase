@@ -44,7 +44,14 @@ export const users = createTable("users", {
   imageUrl: text("image_url"),
 });
 
-export const genderEnum = pgEnum("gender", ["men", "women", "kids", "unisex"]);
+// export const genderEnum = pgEnum("gender", ["men", "women", "kids", "unisex"]);
+export const categoryEnum = pgEnum("category", [
+  "accessories",
+  "men",
+  "women",
+  "kids",
+  "sale",
+]);
 
 export const products = createTable("products", {
   id: uuid("id").primaryKey(),
@@ -52,6 +59,7 @@ export const products = createTable("products", {
     .defaultNow()
     .notNull(),
   title: text("title").notNull(),
-  gender: genderEnum("gender").notNull(),
+  // gender: genderEnum("gender").notNull(),
+  category: categoryEnum("category").notNull(),
   imageUrl: text("image_url"),
 });
