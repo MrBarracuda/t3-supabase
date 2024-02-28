@@ -31,7 +31,10 @@ const config = {
         checksVoidReturn: { attributes: false },
       },
     ],
+    "@typescript-eslint/no-empty-interface": ["error", { allowSingleExtends: true }]
   },
 };
 
 module.exports = config;
+
+// TODO: add components/ui and lib/types to ignore

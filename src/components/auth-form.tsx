@@ -2,81 +2,79 @@
 
 import { useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
-
-import { useState } from "react";
+import { type HTMLAttributes, useState } from "react";
 
 import { cn } from "@/lib/utils";
-// import { userAuthSchema } from "@/lib/validations/auth";
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-// import { toast } from "@/components/ui/use-toast";
 import { Icons } from "@/components/icons";
-import supabaseBrowser from "@/lib/supabase/browser";
+import { supabaseBrowser } from "@/lib/supabase/browser";
+import { getBaseUrl } from "@/trpc/shared";
+import { toast } from "@/components/ui/use-toast";
+import { userAuthSchema, type FormData } from "@/lib/validations/auth";
 
-const userAuthSchema = z.object({
-  email: z.string().email(),
-});
+type AuthFormProps = HTMLAttributes<HTMLDivElement>;
 
-type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
-
-type FormData = z.infer<typeof userAuthSchema>;
-
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+export function AuthForm({ className, ...props }: AuthFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FormData>({
     resolver: zodResolver(userAuthSchema),
   });
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isGitHubLoading, setIsGitHubLoading] = useState<boolean>(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false);
+
   const searchParams = useSearchParams();
 
+  const next = searchParams.get("next") ?? "";
+
+  // TODO: fix issue with redirects
   const handleLoginWithOAuth = (provider: "google" | "github") => {
     const supabase = supabaseBrowser();
-    // with void operator
-    // add + "/login/callback to location.origin"
     void supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: location.origin,
+        redirectTo: getBaseUrl() + "/auth/callback?next=" + next,
       },
     });
   };
 
-  // async function onSubmit(data: FormData) {
-  //   setIsLoading(true);
-  //
-  //   const signInResult = await signIn("email", {
-  //     email: data.email.toLowerCase(),
-  //     redirect: false,
-  //     callbackUrl: searchParams?.get("from") || "/dashboard",
-  //   });
-  //
-  //   setIsLoading(false);
-  //
-  //   if (!signInResult?.ok) {
-  //     return toast({
-  //       title: "Something went wrong.",
-  //       description: "Your sign in request failed. Please try again.",
-  //       variant: "destructive",
-  //     });
-  //   }
-  //
-  //   return toast({
-  //     title: "Check your email",
-  //     description: "We sent you a login link. Be sure to check your spam too.",
-  //   });
-  // }
+  const onSubmit = async (formData: FormData) => {
+    setIsLoading(true);
 
-  async function onSubmit(data: FormData) {
-    //   setIsLoading(true);
-  }
+    const supabase = supabaseBrowser();
+    const { error } = await supabase.auth.signInWithOtp({
+      email: formData.email.toLowerCase(),
+      options: {
+        // TODO: fix issue with redirects
+        emailRedirectTo: next ?? getBaseUrl(),
+      },
+    });
+
+    setIsLoading(false);
+
+    if (error) {
+      return toast({
+        title: "Something went wrong.",
+        description: "Your sign in request failed. Please try again.",
+        variant: "destructive",
+      });
+    }
+
+    reset();
+
+    return toast({
+      title: "Check your email",
+      description: "We sent you a login link. Be sure to check your spam too.",
+    });
+  };
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
@@ -93,7 +91,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={isLoading || isGitHubLoading}
+              disabled={isLoading || isGitHubLoading || isGoogleLoading}
               {...register("email")}
             />
             {errors?.email && (
@@ -125,7 +123,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         className={cn(buttonVariants({ variant: "outline" }))}
         onClick={() => {
           setIsGitHubLoading(true);
-          // signIn("github");
           handleLoginWithOAuth("github");
         }}
         disabled={isLoading || isGitHubLoading}
@@ -134,7 +131,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
           <Icons.gitHub className="mr-2 h-4 w-4" />
-        )}{" "}
+        )}
         Github
       </button>
 
@@ -142,17 +139,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         type="button"
         className={cn(buttonVariants({ variant: "outline" }))}
         onClick={() => {
-          setIsGitHubLoading(true);
-          // signIn("github");
+          setIsGoogleLoading(true);
           handleLoginWithOAuth("google");
         }}
-        disabled={isLoading || isGitHubLoading}
+        disabled={isLoading || isGoogleLoading}
       >
-        {isGitHubLoading ? (
+        {isGoogleLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
           <Icons.google className="mr-2 h-4 w-4" />
-        )}{" "}
+        )}
         Google
       </button>
     </div>

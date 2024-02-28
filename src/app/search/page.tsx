@@ -3,6 +3,7 @@
 // import { getProducts } from "lib/shopify";
 import Index from "@/components/grid";
 
+// TODO: explore edge runtime
 export const runtime = "edge";
 
 export const metadata = {
@@ -10,7 +11,7 @@ export const metadata = {
   description: "Search for products in the store.",
 };
 
-export default async function SearchPage({
+export default async function Search({
   searchParams,
 }: {
   searchParams?: Record<string, string | string[] | undefined>;

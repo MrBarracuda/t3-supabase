@@ -6,7 +6,9 @@ import {
   pgTableCreator,
   serial,
   timestamp,
-  varchar,
+  uuid,
+  text,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -15,19 +17,49 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
- const createTable = pgTableCreator((name) => name);
+const createTable = pgTableCreator((name) => name);
 
 export const posts = createTable(
   "post",
   {
     id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
-    createdAt: timestamp("created_at")
-        .defaultNow()
-        .notNull(),
-    updatedAt: timestamp("updatedAt"),
+    name: text("name"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }),
   },
   (example) => ({
     nameIndex: index("name_idx").on(example.name),
-  })
+  }),
 );
+
+// TODO: Create drizzle schema for profile table
+
+export const users = createTable("users", {
+  id: uuid("id").primaryKey(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
+  email: text("email").unique().notNull(),
+  displayName: text("display_name").notNull(),
+  imageUrl: text("image_url"),
+});
+
+// export const genderEnum = pgEnum("gender", ["men", "women", "kids", "unisex"]);
+export const categoryEnum = pgEnum("category", [
+  "accessories",
+  "men",
+  "women",
+  "kids",
+  "sale",
+]);
+
+export const products = createTable("products", {
+  id: uuid("id").primaryKey(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  title: text("title").notNull(),
+  // gender: genderEnum("gender").notNull(),
+  category: categoryEnum("category").notNull(),
+  imageUrl: text("image_url"),
+});
