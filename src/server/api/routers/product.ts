@@ -12,9 +12,16 @@ export const productRouter = createTRPCRouter({
     }),
   getAllByCategory: publicProcedure
     .input(z.enum(["accessories", "men", "women", "kids", "sale"]))
-    .query(async ({ ctx, input }) => {
+    .query(({ ctx, input }) => {
       return ctx.db.query.products.findMany({
         where: (products, { eq }) => eq(products.category, input),
+      });
+    }),
+  getById: publicProcedure
+    .input(z.string().uuid({ message: "Invalid UUID" }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.products.findFirst({
+        where: (products, { eq }) => eq(products.id, input),
       });
     }),
 });
