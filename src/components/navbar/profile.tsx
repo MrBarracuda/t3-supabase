@@ -77,12 +77,20 @@ export function Profile() {
       <DropdownMenuContent>
         <DropdownMenuLabel>{user.display_name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href="/profile">Profile</Link>
+        <DropdownMenuItem onClick={() => router.push("/profile")}>
+          {/*<Link*/}
+          {/*  href="/profile"*/}
+          {/*  aria-label="profile"*/}
+          {/*  className="appearance-none"*/}
+          {/*>*/}
+          Profile
+          {/*</Link>*/}
         </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-not-allowed focus:bg-background">
+        <DropdownMenuItem onClick={() => router.push("/dashboard")}>
+          {/*<Link href="/dashboard">*/}
           {/*TODO: Allow to navigate to dashboard if user has role of a seller */}
           Seller Dashboard
+          {/*</Link>*/}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
