@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { SIZES } from "@/lib/types";
 
 export const productCreateSchema = z.object({
   id: z.string().uuid({ message: "Invalid UUID" }),
