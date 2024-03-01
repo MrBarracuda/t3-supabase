@@ -9,7 +9,10 @@ import {
   uuid,
   text,
   pgEnum,
+  integer,
 } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm/relations";
+import { CATEGORIES, SIZES } from "@/lib/types";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -17,7 +20,7 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-const createTable = pgTableCreator((name) => name);
+export const createTable = pgTableCreator((name) => name);
 
 export const posts = createTable(
   "post",
@@ -44,22 +47,49 @@ export const users = createTable("users", {
   imageUrl: text("image_url"),
 });
 
-// export const genderEnum = pgEnum("gender", ["men", "women", "kids", "unisex"]);
-export const categoryEnum = pgEnum("category", [
-  "accessories",
-  "men",
-  "women",
-  "kids",
-  "sale",
-]);
+export const categoryEnum = pgEnum("category", CATEGORIES);
 
+export const sizeEnum = pgEnum("size", SIZES);
+
+// TODO: add Maybe add: isSale, stock, isForKids
 export const products = createTable("products", {
   id: uuid("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
-  title: text("title").notNull(),
-  // gender: genderEnum("gender").notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
+  createdBy: uuid("created_by").references(() => users.id),
   category: categoryEnum("category").notNull(),
   imageUrl: text("image_url"),
+  price: integer("price").notNull(),
+  productId: serial("product_id").notNull(),
 });
+
+export const productsRelations = relations(products, ({ many }) => ({
+  brands: many(brands),
+  colors: many(colors),
+  sizes: many(sizes),
+}));
+
+export const brands = createTable("brands", {
+  value: text("value").notNull(),
+  id: serial("id").primaryKey(),
+});
+
+export const colors = createTable("colors", {
+  value: text("value").notNull(),
+  id: serial("id").primaryKey(),
+});
+
+export const sizes = createTable("sizes", {
+  value: sizeEnum("value").notNull(),
+  id: serial("id").primaryKey(),
+});
+
+export const models = createTable("models", {
+  value: text("value").notNull(),
+  id: serial("id").primaryKey(),
+});
+export const brandsRelations = relations(brands, ({ many }) => ({
+  models: many(models),
+}));

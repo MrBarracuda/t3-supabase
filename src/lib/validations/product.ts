@@ -1,12 +1,16 @@
 import { z } from "zod";
+import { SIZES } from "@/lib/types";
 
 export const productCreateSchema = z.object({
-  title: z.string().min(1),
-  createdAt: z.coerce.date(),
   id: z.string().uuid({ message: "Invalid UUID" }),
-  imgUrl: z.string().optional(),
-  // gender: z.enum(["men", "women", "kids", "unisex"]),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date().nullable(),
+  createdBy: z.string().uuid({ message: "UUID doesn't match" }),
   category: z.enum(["accessories", "men", "women", "kids", "sale"]),
+  imgUrl: z.string().nullable(),
+  price: z.number(),
+  // sizes: z.enum(SIZES),
+  productId: z.number(),
 });
 
 export type ProductCreateType = z.infer<typeof productCreateSchema>;

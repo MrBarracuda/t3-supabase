@@ -7,14 +7,14 @@ export const productRouter = createTRPCRouter({
   create: publicProcedure
     .input(productCreateSchema)
     .mutation(async ({ ctx, input }) => {
-      const { title, createdAt, id, category } = input;
-      await ctx.db.insert(products).values({ title, createdAt, id, category });
+      await ctx.db.insert(products).values({ ...input });
     }),
   getAllByCategory: publicProcedure
     .input(z.enum(["accessories", "men", "women", "kids", "sale"]))
     .query(({ ctx, input }) => {
       return ctx.db.query.products.findMany({
         where: (products, { eq }) => eq(products.category, input),
+        // with: { brands: true, colors: true, sizes: true },
       });
     }),
   getById: publicProcedure
