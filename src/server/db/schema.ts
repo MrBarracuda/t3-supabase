@@ -8,11 +8,10 @@ import {
   timestamp,
   uuid,
   text,
-  pgEnum,
   integer,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm/relations";
-import { CATEGORIES, SIZES } from "@/lib/types";
+import { categoryEnum, sizeEnum } from "@/server/db/enum";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -47,11 +46,6 @@ export const users = createTable("users", {
   imageUrl: text("image_url"),
 });
 
-export const categoryEnum = pgEnum("category", CATEGORIES);
-
-export const sizeEnum = pgEnum("size", SIZES);
-
-// TODO: add Maybe add: isSale, stock, isForKids
 export const products = createTable("products", {
   id: uuid("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true })
