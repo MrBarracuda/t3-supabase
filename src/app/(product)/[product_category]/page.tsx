@@ -53,7 +53,8 @@ export default function Product({ params }: ProductProps) {
                 href={`/${currentCategory.title}/${product.id}`}
                 className="font-bold capitalize"
               >
-                {product.title}
+                <h3>{product.brand.value}</h3>
+                <h4>{product.brand.model?.value}</h4>
               </Link>
               <div className="font-medium text-muted-foreground">
                 {product.category}

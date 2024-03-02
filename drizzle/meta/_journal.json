@@ -8,6 +8,34 @@
       "when": 1709290930279,
       "tag": "0000_cooing_professor_monster",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1709327401825,
+      "tag": "0001_swift_marvex",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1709327498498,
+      "tag": "0002_nifty_silver_sable",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1709327775718,
+      "tag": "0003_safe_red_hulk",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1709328215710,
+      "tag": "0004_soft_captain_midlands",
+      "breakpoints": true
     }
   ]
 }

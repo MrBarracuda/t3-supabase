@@ -1,5 +1,5 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { products } from "@/server/db/schema";
+import { brands, models, products } from "@/server/db/schema";
 import { productCreateSchema } from "@/lib/validations/product";
 import { z } from "zod";
 
@@ -14,7 +14,13 @@ export const productRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.products.findMany({
         where: (products, { eq }) => eq(products.category, input),
-        // with: { brands: true, colors: true, sizes: true },
+        with: {
+          brand: {
+            with: {
+              model: true,
+            },
+          },
+        },
       });
     }),
   getById: publicProcedure
@@ -22,6 +28,15 @@ export const productRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.products.findFirst({
         where: (products, { eq }) => eq(products.id, input),
+        with: {
+          brand: {
+            with: {
+              model: true,
+            },
+          },
+          color: true,
+          size: true,
+        },
       });
     }),
 });

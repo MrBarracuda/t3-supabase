@@ -43,6 +43,7 @@ const onError = () =>
 export function CreateProductForm() {
   // TODO: add  { resolver: zodResolver(productCreateSchema) }  to useForm opts https://github.com/colinhacks/zod#merge
   const form = useForm<FormData>();
+  // const { data: user } = api.user.getCurrentUser.useQuery();
 
   const { mutate, isLoading } = api.product.create.useMutation({
     onError,
@@ -59,8 +60,6 @@ export function CreateProductForm() {
   });
 
   function onSubmit(data: FormData) {
-    // const { title, category, imgUrl } = data;
-
     const id = uuidv4();
     const createdAt = formatDate(new Date());
 
