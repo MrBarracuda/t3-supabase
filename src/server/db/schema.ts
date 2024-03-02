@@ -10,7 +10,7 @@ import {
   text,
   integer,
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm/relations";
+import { relations } from "drizzle-orm";
 import { categoryEnum, sizeEnum } from "@/server/db/enum";
 
 /**
@@ -57,17 +57,29 @@ export const products = createTable("products", {
   imageUrl: text("image_url"),
   price: integer("price").notNull(),
   productId: serial("product_id").notNull(),
+  brandId: integer("brand_id")
+    .references(() => brands.id)
+    .notNull(),
+  colorId: integer("color_id")
+    .references(() => colors.id)
+    .notNull(),
+  sizeId: integer("size_id")
+    .references(() => sizes.id)
+    .notNull(),
 });
 
-export const productsRelations = relations(products, ({ many }) => ({
-  brands: many(brands),
-  colors: many(colors),
-  sizes: many(sizes),
+export const productRelations = relations(products, ({ one }) => ({
+  brand: one(brands, { fields: [products.brandId], references: [brands.id] }),
+  color: one(colors, { fields: [products.colorId], references: [colors.id] }),
+  size: one(sizes, { fields: [products.sizeId], references: [sizes.id] }),
 }));
 
 export const brands = createTable("brands", {
   value: text("value").notNull(),
   id: serial("id").primaryKey(),
+  modelId: integer("model_id")
+    .references(() => models.id)
+    .notNull(),
 });
 
 export const colors = createTable("colors", {
@@ -84,6 +96,6 @@ export const models = createTable("models", {
   value: text("value").notNull(),
   id: serial("id").primaryKey(),
 });
-export const brandsRelations = relations(brands, ({ many }) => ({
-  models: many(models),
+export const brandRelations = relations(brands, ({ one }) => ({
+  model: one(models, { fields: [brands.modelId], references: [models.id] }),
 }));
