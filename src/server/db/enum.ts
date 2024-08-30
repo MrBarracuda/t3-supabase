@@ -22,12 +22,38 @@ export const sizeEnum = pgEnum("size", [
   "13",
 ]);
 
-export const categoryEnum = pgEnum("category", [
-  "accessories",
-  "men",
-  "women",
-  "kids",
-  "sale",
+// export const categoryEnum = pgEnum("category", [
+//   "accessories",
+//   "men",
+//   "women",
+//   "kids",
+//   "sale",
+// ]);
+
+export const genderEnum = pgEnum("gender", ["Men", "Women", "Unisex"]);
+
+export const colorEnum = pgEnum("color", [
+  "Black",
+  "Blue",
+  "Brown",
+  "Green",
+  "Grey",
+  "Multi-Color",
+  "Orange",
+  "Pink",
+  "Purple",
+  "Red",
+  "White",
+  "Yellow",
 ]);
 
-// export const genderEnum = pgEnum("gender", ["men", "women", "kids", "unisex"]);
+export const brandsEnum = pgEnum("brand", [
+  "Adidas",
+  "ASICS",
+  "Converse",
+  "Jordan",
+  "New Balance",
+  "Nike",
+  "Puma",
+  "Reebok",
+]);

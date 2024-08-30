@@ -29,3 +29,31 @@ export const FEATURES = [
 ];
 
 export const PROTECTED_PATH = ["/dashboard", "/profile"];
+
+export interface ProductRelations {
+  brand: Brand;
+  color: Color;
+  size: Size;
+}
+
+interface Brand {
+  id: number;
+  value: string;
+  modelId: number;
+  model: Model;
+}
+
+interface Model {
+  id: number;
+  value: string;
+}
+
+interface Size {
+  id: number;
+  value: string;
+}
+
+interface Color {
+  id: number;
+  value: string;
+}
