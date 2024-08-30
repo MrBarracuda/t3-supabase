@@ -9,9 +9,10 @@ import {
   uuid,
   text,
   integer,
+  boolean,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
-import { categoryEnum, sizeEnum } from "@/server/db/enum";
+import { brandsEnum, colorEnum, genderEnum, sizeEnum } from "@/server/db/enum";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -51,44 +52,27 @@ export const products = createTable("products", {
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }),
-  createdBy: uuid("created_by").references(() => users.id),
-  category: categoryEnum("category").notNull(),
+  createdBy: uuid("created_by")
+    .references(() => users.id)
+    .notNull(),
+  gender: genderEnum("gender").array().notNull(),
+  isForKids: boolean("is_for_kids").notNull(),
+  stock: integer("stock").notNull(),
   imageUrl: text("image_url"),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
   price: integer("price").notNull(),
-  productId: serial("product_id").notNull(),
-  brandId: integer("brand_id")
-    .references(() => brands.id)
-    .notNull(),
-  colorId: integer("color_id")
-    .references(() => colors.id)
-    .notNull(),
-  sizeId: integer("size_id")
-    .references(() => sizes.id)
-    .notNull(),
-});
-
-export const productRelations = relations(products, ({ one }) => ({
-  brand: one(brands, { fields: [products.brandId], references: [brands.id] }),
-  color: one(colors, { fields: [products.colorId], references: [colors.id] }),
-  size: one(sizes, { fields: [products.sizeId], references: [sizes.id] }),
-}));
-
-export const brands = createTable("brands", {
-  value: text("value").notNull(),
-  id: serial("id").primaryKey(),
+  color: colorEnum("color").array().notNull(),
+  size: sizeEnum("size").array().notNull(),
   modelId: integer("model_id")
     .references(() => models.id)
     .notNull(),
+  brandId: integer("brand_id")
+    .references(() => brands.id)
+    .notNull(),
 });
 
-export const colors = createTable("colors", {
+export const brands = createTable("brands", {
   value: text("value").notNull(),
-  id: serial("id").primaryKey(),
-});
-
-export const sizes = createTable("sizes", {
-  value: sizeEnum("value").notNull(),
   id: serial("id").primaryKey(),
 });
 
@@ -96,6 +80,19 @@ export const models = createTable("models", {
   value: text("value").notNull(),
   id: serial("id").primaryKey(),
 });
-export const brandRelations = relations(brands, ({ one }) => ({
-  model: one(models, { fields: [brands.modelId], references: [models.id] }),
+
+export const productRelations = relations(products, ({ one }) => ({
+  model: one(models, { fields: [products.modelId], references: [models.id] }),
+  brand: one(brands, { fields: [products.brandId], references: [brands.id] }),
 }));
+
+// export const models = createTable("models", {
+//   value: text("value").notNull(),
+//   id: serial("id").primaryKey(),
+//   brandId: integer("brand_id")
+//     .references(() => brands.id)
+//     .notNull(),
+// });
+// export const modelRelations = relations(models, ({ one }) => ({
+//   brand: one(brands, { fields: [models.brandId], references: [brands.id] }),
+// }));
