@@ -1,98 +1,146 @@
-// Example model schema from the Drizzle docs
-// https://orm.drizzle.team/docs/sql-schema-declaration
-
 import {
-  index,
-  pgTableCreator,
+  pgTable,
   serial,
-  timestamp,
-  uuid,
   text,
+  timestamp,
   integer,
-  boolean,
+  uuid,
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
-import { brandsEnum, colorEnum, genderEnum, sizeEnum } from "@/server/db/enum";
 
-/**
- * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
- * database instance for multiple projects.
- *
- * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
- */
-export const createTable = pgTableCreator((name) => name);
-
-export const posts = createTable(
-  "post",
-  {
-    id: serial("id").primaryKey(),
-    name: text("name"),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }),
-  },
-  (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  }),
-);
-
-// TODO: Create drizzle schema for profile table
-
-export const users = createTable("users", {
+export const users = pgTable("users", {
   id: uuid("id").primaryKey(),
-  createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
-  email: text("email").unique().notNull(),
-  displayName: text("display_name").notNull(),
-  imageUrl: text("image_url"),
+  avatar: text("avatar"),
+  first_name: text("first_name"),
+  last_name: text("last_name"),
+  username: text("username").notNull(),
+  email: text("email").notNull(),
+  password: text("password"),
+  date_of_birth: timestamp("date_of_birth"),
+  phone_number: text("phone_number"),
+  created_at: timestamp("created_at").defaultNow(),
 });
 
-export const products = createTable("products", {
-  id: uuid("id").primaryKey(),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-  createdBy: uuid("created_by")
-    .references(() => users.id)
-    .notNull(),
-  gender: genderEnum("gender").array().notNull(),
-  isForKids: boolean("is_for_kids").notNull(),
-  stock: integer("stock").notNull(),
-  imageUrl: text("image_url"),
-  updatedAt: timestamp("updated_at", { withTimezone: true }),
-  price: integer("price").notNull(),
-  color: colorEnum("color").array().notNull(),
-  size: sizeEnum("size").array().notNull(),
-  modelId: integer("model_id")
-    .references(() => models.id)
-    .notNull(),
-  brandId: integer("brand_id")
-    .references(() => brands.id)
-    .notNull(),
-});
-
-export const brands = createTable("brands", {
-  value: text("value").notNull(),
+export const addresses = pgTable("addresses", {
   id: serial("id").primaryKey(),
+  user_id: uuid("user_id").references(() => users.id),
+  title: text("title"),
+  address_line_1: text("address_line_1"),
+  address_line_2: text("address_line_2"),
+  country: text("country"),
+  city: text("city"),
+  postal_code: text("postal_code"),
+  phone_number: text("phone_number"),
+  created_at: timestamp("created_at").defaultNow(),
 });
 
-export const models = createTable("models", {
-  value: text("value").notNull(),
+export const cart = pgTable("cart", {
   id: serial("id").primaryKey(),
+  user_id: uuid("user_id").references(() => users.id),
+  total: integer("total"),
+  created_at: timestamp("created_at").defaultNow(),
+  updated_at: timestamp("updated_at"),
 });
 
-export const productRelations = relations(products, ({ one }) => ({
-  model: one(models, { fields: [products.modelId], references: [models.id] }),
-  brand: one(brands, { fields: [products.brandId], references: [brands.id] }),
-}));
+export const cart_item = pgTable("cart_item", {
+  id: serial("id").primaryKey(),
+  cart_id: integer("cart_id").references(() => cart.id),
+  product_id: integer("product_id").references(() => products.id),
+  products_sku_id: integer("products_sku_id").references(
+    () => products_skus.id,
+  ),
+  quantity: integer("quantity"),
+  created_at: timestamp("created_at").defaultNow(),
+  updated_at: timestamp("updated_at"),
+});
 
-// export const models = createTable("models", {
-//   value: text("value").notNull(),
-//   id: serial("id").primaryKey(),
-//   brandId: integer("brand_id")
-//     .references(() => brands.id)
-//     .notNull(),
-// });
-// export const modelRelations = relations(models, ({ one }) => ({
-//   brand: one(brands, { fields: [models.brandId], references: [brands.id] }),
-// }));
+export const categories = pgTable("categories", {
+  id: serial("id").primaryKey(),
+  name: text("name"),
+  description: text("description"),
+  created_at: timestamp("created_at").defaultNow(),
+  deleted_at: timestamp("deleted_at"),
+});
+
+export const order_details = pgTable("order_details", {
+  id: serial("id").primaryKey(),
+  user_id: uuid("user_id").references(() => users.id),
+  payment_id: integer("payment_id").references(() => payment_details.id),
+  total: integer("total"),
+  created_at: timestamp("created_at").defaultNow(),
+  updated_at: timestamp("updated_at"),
+});
+
+export const order_item = pgTable("order_item", {
+  id: serial("id").primaryKey(),
+  order_id: integer("order_id").references(() => order_details.id),
+  product_id: integer("product_id").references(() => products.id),
+  products_sku_id: integer("products_sku_id").references(
+    () => products_skus.id,
+  ),
+  quantity: integer("quantity"),
+  created_at: timestamp("created_at").defaultNow(),
+  updated_at: timestamp("updated_at"),
+});
+
+export const payment_details = pgTable("payment_details", {
+  id: serial("id").primaryKey(),
+  order_id: integer("order_id").references(() => order_details.id),
+  amount: integer("amount"),
+  provider: text("provider"),
+  status: text("status"),
+  created_at: timestamp("created_at").defaultNow(),
+  updated_at: timestamp("updated_at"),
+});
+
+export const product_attributes = pgTable("product_attributes", {
+  id: serial("id").primaryKey(),
+  type: text("type"),
+  value: text("value"),
+  created_at: timestamp("created_at").defaultNow(),
+  deleted_at: timestamp("deleted_at"),
+});
+
+export const products = pgTable("products", {
+  id: serial("id").primaryKey(),
+  name: text("name"),
+  description: text("description"),
+  color: text("color"),
+  sku: text("sku"),
+  price: text("price"),
+  category_id: integer("category_id").references(() => categories.id),
+  deleted_at: timestamp("deleted_at"),
+  created_at: timestamp("created_at").defaultNow(),
+});
+
+export const products_skus = pgTable("products_skus", {
+  id: serial("id").primaryKey(),
+  product_id: integer("product_id").references(() => products.id),
+  size_attribute_id: integer("size_attribute_id").references(
+    () => product_attributes.id,
+  ),
+  color_attribute_id: integer("color_attribute_id").references(
+    () => product_attributes.id,
+  ),
+  sku: text("sku"),
+  price: text("price"),
+  quantity: integer("quantity"),
+  created_at: timestamp("created_at").defaultNow(),
+  deleted_at: timestamp("deleted_at"),
+});
+
+export const sub_categories = pgTable("sub_categories", {
+  id: serial("id").primaryKey(),
+  parent_id: integer("parent_id").references(() => categories.id),
+  name: text("name"),
+  description: text("description"),
+  created_at: timestamp("created_at").defaultNow(),
+  deleted_at: timestamp("deleted_at"),
+});
+
+export const wishlist = pgTable("wishlist", {
+  id: serial("id").primaryKey(),
+  product_id: integer("product_id").references(() => products.id),
+  user_id: uuid("user_id").references(() => users.id),
+  created_at: timestamp("created_at").defaultNow(),
+  deleted_at: timestamp("deleted_at"),
+});

@@ -14,7 +14,7 @@ export default function Profile() {
   return (
     <>
       <MaxWidthWrapper className="py-20">
-        <h1 className="text-3xl">{user.displayName} profile</h1>
+        <h1 className="text-3xl">{user.username} profile</h1>
       </MaxWidthWrapper>
     </>
   );

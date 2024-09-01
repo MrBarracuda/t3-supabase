@@ -1,5 +1,6 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { supabaseServer } from "@/lib/supabase/server";
+// import { date, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
 export const userRouter = createTRPCRouter({
   // getCurrent: publicProcedure.query(async ({ ctx }) => {
@@ -32,11 +33,21 @@ export const userRouter = createTRPCRouter({
 
     if (data.session?.user === undefined) {
       return {
+        // id: "",
+        // createdAt: Date,
+        // email: "",
+        // displayName: "",
+        // imageUrl: null,
         id: "",
-        createdAt: Date,
+        avatar: null,
+        first_name: "",
+        last_name: "",
+        username: "",
         email: "",
-        displayName: "",
-        imageUrl: null,
+        password: "",
+        date_of_birth: Date || null,
+        phone_number: "",
+        createdAt: Date,
       };
     }
 

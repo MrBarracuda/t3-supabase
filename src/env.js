@@ -11,8 +11,14 @@ export const env = createEnv({
       .string()
       .url()
       .refine(
-        (str) => !str.includes("YOUR_MYSQL_URL_HERE"),
+        (str) => !str.includes("YOUR_postgresql_URL_HERE"),
         "You forgot to change the default URL",
+      ),
+    DATABASE_PASSWORD: z
+      .string()
+      .refine(
+        (str) => !str.includes("YOUR_DB_PASSWORD_HERE"),
+        "the password is incorrect",
       ),
     NODE_ENV: z
       .enum(["development", "test", "production"])
@@ -38,6 +44,7 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    DATABASE_PASSWORD: process.env.DATABASE_PASSWORD,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

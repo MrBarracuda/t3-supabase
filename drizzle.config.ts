@@ -1,13 +1,13 @@
-import { type Config } from "drizzle-kit";
+import { defineConfig } from "drizzle-kit";
 
 import { env } from "@/env.js";
 
-export default {
+export default defineConfig({
   schema: "./src/server/db/schema.ts",
-  driver: "pg",
+  dialect: "postgresql",
   out: "./supabase/migrations",
   dbCredentials: {
-    connectionString: env.DATABASE_URL,
+    url: env.DATABASE_URL,
   },
-  tablesFilter: ["t3-supabase_*"],
-} satisfies Config;
+  // tablesFilter: ["t3-supabase_*"],
+});
