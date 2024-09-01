@@ -1,146 +1,360 @@
 import {
   pgTable,
-  serial,
-  text,
+  bigint,
+  varchar,
+  date,
   timestamp,
-  integer,
-  uuid,
+  foreignKey,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 export const users = pgTable("users", {
-  id: uuid("id").primaryKey(),
-  avatar: text("avatar"),
-  first_name: text("first_name"),
-  last_name: text("last_name"),
-  username: text("username").notNull(),
-  email: text("email").notNull(),
-  password: text("password"),
-  date_of_birth: timestamp("date_of_birth"),
-  phone_number: text("phone_number"),
-  created_at: timestamp("created_at").defaultNow(),
-});
-
-export const addresses = pgTable("addresses", {
-  id: serial("id").primaryKey(),
-  user_id: uuid("user_id").references(() => users.id),
-  title: text("title"),
-  address_line_1: text("address_line_1"),
-  address_line_2: text("address_line_2"),
-  country: text("country"),
-  city: text("city"),
-  postal_code: text("postal_code"),
-  phone_number: text("phone_number"),
-  created_at: timestamp("created_at").defaultNow(),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  id: bigint("id", { mode: "number" })
+    .primaryKey()
+    .generatedByDefaultAsIdentity({
+      name: "users_id_seq",
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      maxValue: 9999,
+      cache: 1,
+    }),
+  avatar: varchar("avatar"),
+  firstName: varchar("first_name"),
+  lastName: varchar("last_name"),
+  username: varchar("username").notNull(),
+  email: varchar("email").notNull(),
+  password: varchar("password"),
+  dateOfBirth: date("date_of_birth"),
+  phoneNumber: varchar("phone_number"),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+    .defaultNow()
+    .notNull(),
 });
 
 export const cart = pgTable("cart", {
-  id: serial("id").primaryKey(),
-  user_id: uuid("user_id").references(() => users.id),
-  total: integer("total"),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at"),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  id: bigint("id", { mode: "number" })
+    .primaryKey()
+    .generatedByDefaultAsIdentity({
+      name: "cart_id_seq",
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      maxValue: 9999,
+      cache: 1,
+    }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  userId: bigint("user_id", { mode: "number" }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  total: bigint("total", { mode: "number" }),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" }),
 });
 
-export const cart_item = pgTable("cart_item", {
-  id: serial("id").primaryKey(),
-  cart_id: integer("cart_id").references(() => cart.id),
-  product_id: integer("product_id").references(() => products.id),
-  products_sku_id: integer("products_sku_id").references(
-    () => products_skus.id,
-  ),
-  quantity: integer("quantity"),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at"),
+export const addresses = pgTable(
+  "addresses",
+  {
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    id: bigint("id", { mode: "number" })
+      .primaryKey()
+      .generatedByDefaultAsIdentity({
+        name: "addresses_id_seq",
+        startWith: 1,
+        increment: 1,
+        minValue: 1,
+        maxValue: 9999,
+        cache: 1,
+      }),
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    userId: bigint("user_id", { mode: "number" }),
+    title: varchar("title"),
+    addressLine1: varchar("address_line_1"),
+    addressLine2: varchar("address_line_2"),
+    country: varchar("country"),
+    city: varchar("city"),
+    postalCode: varchar("postal_code"),
+    phoneNumber: varchar("phone_number"),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => {
+    return {
+      addressesUserIdFkey: foreignKey({
+        columns: [table.userId],
+        foreignColumns: [users.id],
+        name: "addresses_user_id_fkey",
+      })
+        .onUpdate("cascade")
+        .onDelete("cascade"),
+    };
+  },
+);
+
+export const cartItem = pgTable("cart_item", {
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  id: bigint("id", { mode: "number" })
+    .primaryKey()
+    .generatedByDefaultAsIdentity({
+      name: "cart_item_id_seq",
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      maxValue: 9999,
+      cache: 1,
+    }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  cartId: bigint("cart_id", { mode: "number" }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  productId: bigint("product_id", { mode: "number" }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  productsSkuId: bigint("products_sku_id", { mode: "number" }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  quantity: bigint("quantity", { mode: "number" }),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" }),
 });
 
 export const categories = pgTable("categories", {
-  id: serial("id").primaryKey(),
-  name: text("name"),
-  description: text("description"),
-  created_at: timestamp("created_at").defaultNow(),
-  deleted_at: timestamp("deleted_at"),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  id: bigint("id", { mode: "number" })
+    .primaryKey()
+    .generatedByDefaultAsIdentity({
+      name: "categories_id_seq",
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      maxValue: 9999,
+      cache: 1,
+    }),
+  name: varchar("name"),
+  description: varchar("description"),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+    .defaultNow()
+    .notNull(),
+  deletedAt: timestamp("deleted_at", { withTimezone: true, mode: "string" }),
 });
 
-export const order_details = pgTable("order_details", {
-  id: serial("id").primaryKey(),
-  user_id: uuid("user_id").references(() => users.id),
-  payment_id: integer("payment_id").references(() => payment_details.id),
-  total: integer("total"),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at"),
+export const orderItem = pgTable("order_item", {
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  id: bigint("id", { mode: "number" })
+    .primaryKey()
+    .generatedByDefaultAsIdentity({
+      name: "order_item_id_seq",
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      maxValue: 9999,
+      cache: 1,
+    }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  orderId: bigint("order_id", { mode: "number" }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  productId: bigint("product_id", { mode: "number" }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  productsSkuId: bigint("products_sku_id", { mode: "number" }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  quantity: bigint("quantity", { mode: "number" }),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" }),
 });
 
-export const order_item = pgTable("order_item", {
-  id: serial("id").primaryKey(),
-  order_id: integer("order_id").references(() => order_details.id),
-  product_id: integer("product_id").references(() => products.id),
-  products_sku_id: integer("products_sku_id").references(
-    () => products_skus.id,
-  ),
-  quantity: integer("quantity"),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at"),
+export const subCategories = pgTable(
+  "sub_categories",
+  {
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    id: bigint("id", { mode: "number" })
+      .primaryKey()
+      .generatedByDefaultAsIdentity({
+        name: "sub_categories_id_seq",
+        startWith: 1,
+        increment: 1,
+        minValue: 1,
+        maxValue: 9999,
+        cache: 1,
+      }),
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    parentId: bigint("parent_id", { mode: "number" }),
+    name: varchar("name"),
+    description: varchar("description"),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+      .defaultNow()
+      .notNull(),
+    deletedAt: timestamp("deleted_at", { withTimezone: true, mode: "string" }),
+  },
+  (table) => {
+    return {
+      subCategoriesParentIdFkey: foreignKey({
+        columns: [table.parentId],
+        foreignColumns: [categories.id],
+        name: "sub_categories_parent_id_fkey",
+      })
+        .onUpdate("cascade")
+        .onDelete("cascade"),
+    };
+  },
+);
+
+export const orderDetails = pgTable("order_details", {
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  id: bigint("id", { mode: "number" })
+    .primaryKey()
+    .generatedByDefaultAsIdentity({
+      name: "order_details_id_seq",
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      maxValue: 9999,
+      cache: 1,
+    }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  userId: bigint("user_id", { mode: "number" }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  paymentId: bigint("payment_id", { mode: "number" }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  total: bigint("total", { mode: "number" }),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" }),
 });
 
-export const payment_details = pgTable("payment_details", {
-  id: serial("id").primaryKey(),
-  order_id: integer("order_id").references(() => order_details.id),
-  amount: integer("amount"),
-  provider: text("provider"),
-  status: text("status"),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at"),
+export const paymentDetails = pgTable("payment_details", {
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  id: bigint("id", { mode: "number" })
+    .primaryKey()
+    .generatedByDefaultAsIdentity({
+      name: "payment_details_id_seq",
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      maxValue: 9999,
+      cache: 1,
+    }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  orderId: bigint("order_id", { mode: "number" }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  amount: bigint("amount", { mode: "number" }),
+  provider: varchar("provider"),
+  status: varchar("status"),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" }),
 });
 
-export const product_attributes = pgTable("product_attributes", {
-  id: serial("id").primaryKey(),
-  type: text("type"),
-  value: text("value"),
-  created_at: timestamp("created_at").defaultNow(),
-  deleted_at: timestamp("deleted_at"),
+export const products = pgTable(
+  "products",
+  {
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    id: bigint("id", { mode: "number" })
+      .primaryKey()
+      .generatedByDefaultAsIdentity({
+        name: "products_id_seq",
+        startWith: 1,
+        increment: 1,
+        minValue: 1,
+        maxValue: 9999,
+        cache: 1,
+      }),
+    name: varchar("name"),
+    description: varchar("description"),
+    color: varchar("color"),
+    sku: varchar("sku"),
+    price: varchar("price"),
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    categoryId: bigint("category_id", { mode: "number" }),
+    deletedAt: timestamp("deleted_at", { withTimezone: true, mode: "string" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => {
+    return {
+      productsCategoryIdFkey: foreignKey({
+        columns: [table.categoryId],
+        foreignColumns: [categories.id],
+        name: "products_category_id_fkey",
+      })
+        .onUpdate("cascade")
+        .onDelete("cascade"),
+    };
+  },
+);
+
+export const productAttributes = pgTable("product_ attributes", {
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  id: bigint("id", { mode: "number" })
+    .primaryKey()
+    .generatedByDefaultAsIdentity({
+      name: "product_ attributes_id_seq",
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      maxValue: 9999,
+    }),
+  type: varchar("type"),
+  value: varchar("value"),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+    .defaultNow()
+    .notNull(),
+  deletedAt: timestamp("deleted_at", { withTimezone: true, mode: "string" }),
 });
 
-export const products = pgTable("products", {
-  id: serial("id").primaryKey(),
-  name: text("name"),
-  description: text("description"),
-  color: text("color"),
-  sku: text("sku"),
-  price: text("price"),
-  category_id: integer("category_id").references(() => categories.id),
-  deleted_at: timestamp("deleted_at"),
-  created_at: timestamp("created_at").defaultNow(),
-});
-
-export const products_skus = pgTable("products_skus", {
-  id: serial("id").primaryKey(),
-  product_id: integer("product_id").references(() => products.id),
-  size_attribute_id: integer("size_attribute_id").references(
-    () => product_attributes.id,
-  ),
-  color_attribute_id: integer("color_attribute_id").references(
-    () => product_attributes.id,
-  ),
-  sku: text("sku"),
-  price: text("price"),
-  quantity: integer("quantity"),
-  created_at: timestamp("created_at").defaultNow(),
-  deleted_at: timestamp("deleted_at"),
-});
-
-export const sub_categories = pgTable("sub_categories", {
-  id: serial("id").primaryKey(),
-  parent_id: integer("parent_id").references(() => categories.id),
-  name: text("name"),
-  description: text("description"),
-  created_at: timestamp("created_at").defaultNow(),
-  deleted_at: timestamp("deleted_at"),
+export const productsSkus = pgTable("products_skus", {
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  id: bigint("id", { mode: "number" })
+    .primaryKey()
+    .generatedByDefaultAsIdentity({
+      name: "products_skus_id_seq",
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      maxValue: 9999,
+      cache: 1,
+    }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  productId: bigint("product_id", { mode: "number" }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  sizeAttributeId: bigint("size_attribute_id", { mode: "number" }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  colorAttributeId: bigint("color_attribute_id", { mode: "number" }),
+  sku: varchar("sku"),
+  price: varchar("price"),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  quantity: bigint("quantity", { mode: "number" }),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+    .defaultNow()
+    .notNull(),
+  deletedAt: timestamp("deleted_at", { withTimezone: true, mode: "string" }),
 });
 
 export const wishlist = pgTable("wishlist", {
-  id: serial("id").primaryKey(),
-  product_id: integer("product_id").references(() => products.id),
-  user_id: uuid("user_id").references(() => users.id),
-  created_at: timestamp("created_at").defaultNow(),
-  deleted_at: timestamp("deleted_at"),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  id: bigint("id", { mode: "number" })
+    .primaryKey()
+    .generatedByDefaultAsIdentity({
+      name: "wishlist_id_seq",
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      maxValue: 9999,
+      cache: 1,
+    }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  productId: bigint("product_id", { mode: "number" }),
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  userId: bigint("user_id", { mode: "number" }),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+    .defaultNow()
+    .notNull(),
+  deletedAt: timestamp("deleted_at", { withTimezone: true, mode: "string" }),
 });
