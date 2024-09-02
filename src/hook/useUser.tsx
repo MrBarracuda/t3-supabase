@@ -9,21 +9,21 @@ const initUser = {
   username: "",
   email: "",
   password: "",
-  date_of_birth: Date || null,
+  date_of_birth: "",
   phone_number: "",
-  createdAt: Date,
+  createdAt: "",
 };
 
 export function useUser() {
   const userQueryFn = async () => {
     const supabase = supabaseBrowser();
-    const { data } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getSession();
 
-    if (data.user) {
+    if (data.session?.user) {
       const { data: user } = await supabase
         .from("users")
         .select("*")
-        .eq("id", data.user.id)
+        .eq("id", data.session.user.id)
         .single();
       return user;
     }

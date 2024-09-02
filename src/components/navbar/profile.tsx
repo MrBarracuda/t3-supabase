@@ -69,13 +69,13 @@ export function Profile() {
       <DropdownMenuTrigger asChild aria-hidden>
         <Button variant="ghost" size="icon" aria-label="profile dropdown">
           <Avatar>
-            <AvatarImage src={user.image_url ?? ""} />
-            <AvatarFallback>{user.display_name?.slice(0, 1)}</AvatarFallback>
+            <AvatarImage src={user.avatar ?? ""} />
+            <AvatarFallback>{user.username?.slice(0, 1)}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>{user.display_name}</DropdownMenuLabel>
+        <DropdownMenuLabel>{user.username}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => router.push("/profile")}>
           {/*<Link*/}
