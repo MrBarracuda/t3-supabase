@@ -5,21 +5,14 @@ import {
   date,
   timestamp,
   foreignKey,
+  uuid,
+  integer,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 
 export const users = pgTable("users", {
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-  id: bigint("id", { mode: "number" })
-    .primaryKey()
-    .generatedByDefaultAsIdentity({
-      name: "users_id_seq",
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      maxValue: 9999,
-      cache: 1,
-    }),
+  id: uuid("id").primaryKey(),
   avatar: varchar("avatar"),
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
@@ -46,7 +39,7 @@ export const cart = pgTable("cart", {
       cache: 1,
     }),
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-  userId: bigint("user_id", { mode: "number" }),
+  userId: uuid("user_id"),
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
   total: bigint("total", { mode: "number" }),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
@@ -70,7 +63,7 @@ export const addresses = pgTable(
         cache: 1,
       }),
     // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    userId: bigint("user_id", { mode: "number" }),
+    userId: uuid("user_id"),
     title: varchar("title"),
     addressLine1: varchar("address_line_1"),
     addressLine2: varchar("address_line_2"),
@@ -216,7 +209,7 @@ export const orderDetails = pgTable("order_details", {
       cache: 1,
     }),
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-  userId: bigint("user_id", { mode: "number" }),
+  userId: uuid("user_id"),
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
   paymentId: bigint("payment_id", { mode: "number" }),
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
@@ -352,7 +345,7 @@ export const wishlist = pgTable("wishlist", {
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
   productId: bigint("product_id", { mode: "number" }),
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-  userId: bigint("user_id", { mode: "number" }),
+  userId: uuid("user_id"),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
     .defaultNow()
     .notNull(),
