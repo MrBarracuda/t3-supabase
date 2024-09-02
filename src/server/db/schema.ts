@@ -8,7 +8,6 @@ import {
   uuid,
   integer,
 } from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm";
 
 export const users = pgTable("users", {
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
@@ -28,16 +27,7 @@ export const users = pgTable("users", {
 
 export const cart = pgTable("cart", {
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-  id: bigint("id", { mode: "number" })
-    .primaryKey()
-    .generatedByDefaultAsIdentity({
-      name: "cart_id_seq",
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      maxValue: 9999,
-      cache: 1,
-    }),
+  id: integer("id").primaryKey(),
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
   userId: uuid("user_id"),
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
@@ -52,16 +42,7 @@ export const addresses = pgTable(
   "addresses",
   {
     // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    id: bigint("id", { mode: "number" })
-      .primaryKey()
-      .generatedByDefaultAsIdentity({
-        name: "addresses_id_seq",
-        startWith: 1,
-        increment: 1,
-        minValue: 1,
-        maxValue: 9999,
-        cache: 1,
-      }),
+    id: integer("id").primaryKey(),
     // You can use { mode: "bigint" } if numbers are exceeding js number limitations
     userId: uuid("user_id"),
     title: varchar("title"),
@@ -90,16 +71,8 @@ export const addresses = pgTable(
 
 export const cartItem = pgTable("cart_item", {
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-  id: bigint("id", { mode: "number" })
-    .primaryKey()
-    .generatedByDefaultAsIdentity({
-      name: "cart_item_id_seq",
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      maxValue: 9999,
-      cache: 1,
-    }),
+  id: integer("id").primaryKey(),
+
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
   cartId: bigint("cart_id", { mode: "number" }),
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
@@ -115,17 +88,8 @@ export const cartItem = pgTable("cart_item", {
 });
 
 export const categories = pgTable("categories", {
-  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-  id: bigint("id", { mode: "number" })
-    .primaryKey()
-    .generatedByDefaultAsIdentity({
-      name: "categories_id_seq",
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      maxValue: 9999,
-      cache: 1,
-    }),
+  id: integer("id").primaryKey(),
+
   name: varchar("name"),
   description: varchar("description"),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
@@ -135,18 +99,7 @@ export const categories = pgTable("categories", {
 });
 
 export const orderItem = pgTable("order_item", {
-  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-  id: bigint("id", { mode: "number" })
-    .primaryKey()
-    .generatedByDefaultAsIdentity({
-      name: "order_item_id_seq",
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      maxValue: 9999,
-      cache: 1,
-    }),
-  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  id: integer("id").primaryKey(),
   orderId: bigint("order_id", { mode: "number" }),
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
   productId: bigint("product_id", { mode: "number" }),
@@ -163,18 +116,7 @@ export const orderItem = pgTable("order_item", {
 export const subCategories = pgTable(
   "sub_categories",
   {
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    id: bigint("id", { mode: "number" })
-      .primaryKey()
-      .generatedByDefaultAsIdentity({
-        name: "sub_categories_id_seq",
-        startWith: 1,
-        increment: 1,
-        minValue: 1,
-        maxValue: 9999,
-        cache: 1,
-      }),
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    id: integer("id").primaryKey(),
     parentId: bigint("parent_id", { mode: "number" }),
     name: varchar("name"),
     description: varchar("description"),
@@ -197,18 +139,8 @@ export const subCategories = pgTable(
 );
 
 export const orderDetails = pgTable("order_details", {
-  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-  id: bigint("id", { mode: "number" })
-    .primaryKey()
-    .generatedByDefaultAsIdentity({
-      name: "order_details_id_seq",
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      maxValue: 9999,
-      cache: 1,
-    }),
-  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  id: integer("id").primaryKey(),
+
   userId: uuid("user_id"),
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
   paymentId: bigint("payment_id", { mode: "number" }),
@@ -221,17 +153,8 @@ export const orderDetails = pgTable("order_details", {
 });
 
 export const paymentDetails = pgTable("payment_details", {
-  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-  id: bigint("id", { mode: "number" })
-    .primaryKey()
-    .generatedByDefaultAsIdentity({
-      name: "payment_details_id_seq",
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      maxValue: 9999,
-      cache: 1,
-    }),
+  id: integer("id").primaryKey(),
+
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
   orderId: bigint("order_id", { mode: "number" }),
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
@@ -247,17 +170,8 @@ export const paymentDetails = pgTable("payment_details", {
 export const products = pgTable(
   "products",
   {
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    id: bigint("id", { mode: "number" })
-      .primaryKey()
-      .generatedByDefaultAsIdentity({
-        name: "products_id_seq",
-        startWith: 1,
-        increment: 1,
-        minValue: 1,
-        maxValue: 9999,
-        cache: 1,
-      }),
+    id: integer("id").primaryKey(),
+
     name: varchar("name"),
     description: varchar("description"),
     color: varchar("color"),
@@ -285,15 +199,8 @@ export const products = pgTable(
 
 export const productAttributes = pgTable("product_ attributes", {
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-  id: bigint("id", { mode: "number" })
-    .primaryKey()
-    .generatedByDefaultAsIdentity({
-      name: "product_ attributes_id_seq",
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      maxValue: 9999,
-    }),
+  id: integer("id").primaryKey(),
+
   type: varchar("type"),
   value: varchar("value"),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
@@ -304,16 +211,8 @@ export const productAttributes = pgTable("product_ attributes", {
 
 export const productsSkus = pgTable("products_skus", {
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-  id: bigint("id", { mode: "number" })
-    .primaryKey()
-    .generatedByDefaultAsIdentity({
-      name: "products_skus_id_seq",
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      maxValue: 9999,
-      cache: 1,
-    }),
+  id: integer("id").primaryKey(),
+
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
   productId: bigint("product_id", { mode: "number" }),
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
@@ -332,16 +231,8 @@ export const productsSkus = pgTable("products_skus", {
 
 export const wishlist = pgTable("wishlist", {
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-  id: bigint("id", { mode: "number" })
-    .primaryKey()
-    .generatedByDefaultAsIdentity({
-      name: "wishlist_id_seq",
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      maxValue: 9999,
-      cache: 1,
-    }),
+  id: integer("id").primaryKey(),
+
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
   productId: bigint("product_id", { mode: "number" }),
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
