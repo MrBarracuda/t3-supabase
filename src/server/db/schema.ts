@@ -8,8 +8,11 @@ import {
   timestamp,
   uuid,
   text,
-  pgEnum,
+  integer,
+  boolean,
 } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
+import { brandsEnum, colorEnum, genderEnum, sizeEnum } from "@/server/db/enum";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -17,7 +20,7 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-const createTable = pgTableCreator((name) => name);
+export const createTable = pgTableCreator((name) => name);
 
 export const posts = createTable(
   "post",
@@ -44,22 +47,52 @@ export const users = createTable("users", {
   imageUrl: text("image_url"),
 });
 
-// export const genderEnum = pgEnum("gender", ["men", "women", "kids", "unisex"]);
-export const categoryEnum = pgEnum("category", [
-  "accessories",
-  "men",
-  "women",
-  "kids",
-  "sale",
-]);
-
 export const products = createTable("products", {
   id: uuid("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
-  title: text("title").notNull(),
-  // gender: genderEnum("gender").notNull(),
-  category: categoryEnum("category").notNull(),
+  createdBy: uuid("created_by")
+    .references(() => users.id)
+    .notNull(),
+  gender: genderEnum("gender").array().notNull(),
+  isForKids: boolean("is_for_kids").notNull(),
+  stock: integer("stock").notNull(),
   imageUrl: text("image_url"),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
+  price: integer("price").notNull(),
+  color: colorEnum("color").array().notNull(),
+  size: sizeEnum("size").array().notNull(),
+  modelId: integer("model_id")
+    .references(() => models.id)
+    .notNull(),
+  brandId: integer("brand_id")
+    .references(() => brands.id)
+    .notNull(),
 });
+
+export const brands = createTable("brands", {
+  value: text("value").notNull(),
+  id: serial("id").primaryKey(),
+});
+
+export const models = createTable("models", {
+  value: text("value").notNull(),
+  id: serial("id").primaryKey(),
+});
+
+export const productRelations = relations(products, ({ one }) => ({
+  model: one(models, { fields: [products.modelId], references: [models.id] }),
+  brand: one(brands, { fields: [products.brandId], references: [brands.id] }),
+}));
+
+// export const models = createTable("models", {
+//   value: text("value").notNull(),
+//   id: serial("id").primaryKey(),
+//   brandId: integer("brand_id")
+//     .references(() => brands.id)
+//     .notNull(),
+// });
+// export const modelRelations = relations(models, ({ one }) => ({
+//   brand: one(brands, { fields: [models.brandId], references: [brands.id] }),
+// }));
